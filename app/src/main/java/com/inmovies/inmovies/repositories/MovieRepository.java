@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.inmovies.inmovies.models.MovieModel;
+import com.inmovies.inmovies.request.ApiClient;
 
 import java.util.List;
 
@@ -13,10 +14,10 @@ import java.util.List;
 public class MovieRepository {
     // Singleton Class
     private static MovieRepository instance;
-    private MutableLiveData<List<MovieModel>> mutableLiveMovieData;
+    private ApiClient apiClient;
 
     private MovieRepository(){
-        mutableLiveMovieData = new MutableLiveData<>();
+        apiClient = ApiClient.getInstance();
     }
 
     public static MovieRepository getInstance(){
@@ -26,7 +27,12 @@ public class MovieRepository {
     }
 
     public LiveData<List<MovieModel>> getMovies(){
-        return mutableLiveMovieData;
+        return apiClient.getMovies();
+    }
+
+    // Calling the searchMovieApi
+    public void searchMovies(int pageNumber){
+        apiClient.searchPopularMoviesApi(pageNumber);
     }
 
 }

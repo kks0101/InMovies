@@ -21,4 +21,9 @@ public class HomeViewModel extends ViewModel {
         return movieRepository.getMovies();
     }
 
+    // Calling method in View Model
+    public void searchMovies(int pageNumber){
+        movieRepository.searchMovies(pageNumber);
+    }
+
 }

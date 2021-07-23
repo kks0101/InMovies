@@ -16,7 +16,7 @@ public interface MovieApi {
     @GET("/3/movie/popular")
     Call<MoviePopularResponse> popularMovies(
             @Query("api_key") String api_key,
-            @Query("page") String page
+            @Query("page") int page
     );
 
     // Get the now playing movie details
@@ -24,7 +24,7 @@ public interface MovieApi {
     @GET("/3/movie/now_playing")
     Call<MovieNowPlayingResponse> nowPlayingMovie(
             @Query("api_key") String api_key,
-            @Query("page") String page
+            @Query("page") int page
     );
 
 }

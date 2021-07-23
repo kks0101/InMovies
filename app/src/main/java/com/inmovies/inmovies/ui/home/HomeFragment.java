@@ -52,89 +52,112 @@ public class HomeFragment extends Fragment {
 //            }
 //        });
         final Button button = binding.buttonHome;
+
+        observeChanges();
         final Button popularMovieButton = binding.buttonPopular;
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getNowPlayingMovies();
+                searchMovies(1);
             }
         });
 
-        popularMovieButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getPopularMovies();
-            }
-        });
+//        popularMovieButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                getPopularMovies();
+//            }
+//        });
         return root;
     }
 
-    public void getPopularMovies(){
-        MovieApi movieApi = ServiceRequest.getMovieApi();
 
-        Call<MoviePopularResponse> popularResponseCall = movieApi.popularMovies(
-                Constants.API_KEY,
-                "1"
-        );
+    // calling method in home fragment/activity
+    public void searchMovies(int pageNumber){
+        homeViewModel.searchMovies(pageNumber);
+    }
 
-        popularResponseCall.enqueue(new Callback<MoviePopularResponse>() {
+    public void observeChanges(){
+        homeViewModel.getMovies().observe(getViewLifecycleOwner(), new Observer<List<MovieModel>>() {
             @Override
-            public void onResponse(Call<MoviePopularResponse> call, Response<MoviePopularResponse> response) {
-                if (response.code()==200){
-                    Log.v("tag", "Popular movies: " + response.body().toString());
-
-                    List<MovieModel> popularMovieList = new ArrayList<>(response.body().getPopularMovieList());
-
-                    for(MovieModel movie: popularMovieList){
+            public void onChanged(List<MovieModel> movieModels) {
+                // observing for data change
+                if(movieModels != null){
+                    for(MovieModel movie: movieModels){
                         Log.v("tag", "Title: " + movie.getTitle());
                     }
                 }
-                else{
-                    Log.v("tag", "Error : " + response.errorBody().toString() );
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MoviePopularResponse> call, Throwable t) {
-
             }
         });
     }
 
-    public void getNowPlayingMovies(){
-        MovieApi movieApi = ServiceRequest.getMovieApi();
-
-        Call<MovieNowPlayingResponse> nowPlayingResponseCall = movieApi.nowPlayingMovie(
-                Constants.API_KEY,
-                "1"
-        );
-
-        nowPlayingResponseCall.enqueue(new Callback<MovieNowPlayingResponse>() {
-            @Override
-            public void onResponse(Call<MovieNowPlayingResponse> call, Response<MovieNowPlayingResponse> response) {
-
-                if(response.code() == 200){
-                    Log.v("tag", "the response " + response.body().toString());
-                    List<MovieModel> movies = new ArrayList<>(response.body().getNowPlayingMovies());
-
-                    for(MovieModel movie : movies){
-                        Log.v("tag", "Title: " + movie.getTitle());
-                    }
-                }else{
-
-                    Log.v("tag", response.errorBody().toString());
-
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<MovieNowPlayingResponse> call, Throwable t) {
-
-            }
-        });
-
-    }
+//
+//    public void getPopularMovies(){
+//        MovieApi movieApi = ServiceRequest.getMovieApi();
+//
+//        Call<MoviePopularResponse> popularResponseCall = movieApi.popularMovies(
+//                Constants.API_KEY,
+//                1
+//        );
+//
+//        popularResponseCall.enqueue(new Callback<MoviePopularResponse>() {
+//            @Override
+//            public void onResponse(Call<MoviePopularResponse> call, Response<MoviePopularResponse> response) {
+//                if (response.code()==200){
+//                    Log.v("tag", "Popular movies: " + response.body().toString());
+//
+//                    List<MovieModel> popularMovieList = new ArrayList<>(response.body().getPopularMovieList());
+//
+//                    for(MovieModel movie: popularMovieList){
+//                        Log.v("tag", "Title: " + movie.getTitle());
+//                    }
+//                }
+//                else{
+//                    Log.v("tag", "Error : " + response.errorBody().toString() );
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<MoviePopularResponse> call, Throwable t) {
+//
+//            }
+//        });
+//    }
+//
+//    public void getNowPlayingMovies(){
+//        MovieApi movieApi = ServiceRequest.getMovieApi();
+//
+//        Call<MovieNowPlayingResponse> nowPlayingResponseCall = movieApi.nowPlayingMovie(
+//                Constants.API_KEY,
+//                1
+//        );
+//
+//        nowPlayingResponseCall.enqueue(new Callback<MovieNowPlayingResponse>() {
+//            @Override
+//            public void onResponse(Call<MovieNowPlayingResponse> call, Response<MovieNowPlayingResponse> response) {
+//
+//                if(response.code() == 200){
+//                    Log.v("tag", "the response " + response.body().toString());
+//                    List<MovieModel> movies = new ArrayList<>(response.body().getNowPlayingMovies());
+//
+//                    for(MovieModel movie : movies){
+//                        Log.v("tag", "Title: " + movie.getTitle());
+//                    }
+//                }else{
+//
+//                    Log.v("tag", response.errorBody().toString());
+//
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Call<MovieNowPlayingResponse> call, Throwable t) {
+//
+//            }
+//        });
+//
+//    }
 
 
     @Override
