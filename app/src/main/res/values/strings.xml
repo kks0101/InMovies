@@ -3,4 +3,7 @@
     <string name="title_home">Home</string>
     <string name="title_bookmarks">Bookmarks</string>
     <string name="title_search">Search</string>
+    <string name="appBarAttribution">Powered By</string>
+    <string name="appBarBrowseMovies">Browse through movies</string>
+    <string name="appBarHello">Hello!!</string>
 </resources>
