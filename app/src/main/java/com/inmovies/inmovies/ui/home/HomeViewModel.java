@@ -1,7 +1,6 @@
 package com.inmovies.inmovies.ui.home;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.inmovies.inmovies.models.MovieModel;
@@ -17,11 +16,16 @@ public class HomeViewModel extends ViewModel {
         movieRepository = MovieRepository.getInstance();
     }
 
-    public LiveData<List<MovieModel>> getMovies(){
-        return movieRepository.getMovies();
+    public LiveData<List<MovieModel>> getPopularMovies(){
+        return movieRepository.getPopularMovies();
     }
 
-    // Calling method in View Model
+    public LiveData<List<MovieModel>> getNowPlayingMovies(){
+        return movieRepository.getNowPlayingMovies();
+    }
+
+    // Home fragment show the list of now playing and popular movies:
+    // Requesting the same from repository
     public void searchMovies(int pageNumber){
         movieRepository.searchMovies(pageNumber);
     }

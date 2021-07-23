@@ -27,11 +27,15 @@ public class ApiClient {
 
     private static ApiClient instance;
 
-    private static MutableLiveData<List<MovieModel>> movieList;
+    // two lists for two api calls : one for now playing movies, other for popular movies
+    private static MutableLiveData<List<MovieModel>> nowPlayingMovieList, popularMovieList;
 
     private RetrieveNowPlayingMoviesRunnable retrieveNowPlayingMoviesRunnable;
+    private RetrievePopularMoviesRunnable retrievePopularMoviesRunnable;
+
     private ApiClient(){
-        movieList = new MutableLiveData<>();
+        nowPlayingMovieList = new MutableLiveData<>();
+        popularMovieList = new MutableLiveData<>();
     }
 
     public static ApiClient getInstance(){
@@ -40,12 +44,15 @@ public class ApiClient {
         return instance;
     }
 
-    public LiveData<List<MovieModel>> getMovies(){
-        return movieList;
+    public LiveData<List<MovieModel>> getNowPlayingMovies(){
+        return nowPlayingMovieList;
     }
 
+    public LiveData<List<MovieModel>> getPopularMovies(){
+        return popularMovieList;
+    }
 
-    public void searchPopularMoviesApi(int pageNumber){
+    public void searchNowPlayingMovies(int pageNumber){
 
         if(retrieveNowPlayingMoviesRunnable!= null)
             retrieveNowPlayingMoviesRunnable = null;
@@ -54,6 +61,28 @@ public class ApiClient {
 
         final Future handler = AppExecutors.getInstance().getScheduledExecutorService()
                 .submit(retrieveNowPlayingMoviesRunnable);
+
+
+        AppExecutors.getInstance().getScheduledExecutorService().schedule(new Runnable() {
+            @Override
+            public void run() {
+                // Cancelling the retrofit call
+                handler.cancel(true);
+            }
+        }, 5000, TimeUnit.MILLISECONDS);
+
+
+    }
+
+    public void searchPopularMovies(int pageNumber){
+
+        if(retrievePopularMoviesRunnable!= null)
+            retrievePopularMoviesRunnable = null;
+
+        retrievePopularMoviesRunnable = new RetrievePopularMoviesRunnable(pageNumber);
+
+        final Future handler = AppExecutors.getInstance().getScheduledExecutorService()
+                .submit(retrievePopularMoviesRunnable);
 
 
         AppExecutors.getInstance().getScheduledExecutorService().schedule(new Runnable() {
@@ -97,13 +126,13 @@ public class ApiClient {
 
                     if(pageNumber == 1){
                         // postValue is used for background thread
-                        movieList.postValue(list);
+                        nowPlayingMovieList.postValue(list);
                     }
                     else{
-                        List<MovieModel> currentMovies = movieList.getValue();
+                        List<MovieModel> currentMovies = nowPlayingMovieList.getValue();
                         currentMovies.addAll(list);
 
-                        movieList.postValue(currentMovies);
+                        nowPlayingMovieList.postValue(currentMovies);
                     }
                 }
                 else{
@@ -114,23 +143,80 @@ public class ApiClient {
 
             } catch (IOException e) {
                 e.printStackTrace();
-                movieList.postValue(null);
+                nowPlayingMovieList.postValue(null);
             }
-
 
         }
 
-//        // Get Popular Movies
-//        private Call<MoviePopularResponse> getPopularMovies(int pageNumber){
-//            return ServiceRequest.getMovieApi().popularMovies(
-//                    Constants.API_KEY,
-//                    pageNumber
-//            );
-//        }
 
         // Get Now Playing Movies
         private Call<MovieNowPlayingResponse> getNowPlayingMovies(int pageNumber){
             return ServiceRequest.getMovieApi().nowPlayingMovie(
+                    Constants.API_KEY,
+                    pageNumber
+            );
+        }
+
+        private void cancelRequest(){
+            Log.v("tag", "Cancelling Request");
+            cancelRequest = true;
+        }
+    }
+
+
+
+    private class RetrievePopularMoviesRunnable implements Runnable{
+
+        private int pageNumber;
+        boolean cancelRequest;
+
+        public RetrievePopularMoviesRunnable(int pageNumber) {
+            this.pageNumber = pageNumber;
+            cancelRequest = false;
+        }
+
+
+        @Override
+        public void run() {
+
+
+            // Getting the response objects
+            try {
+                Response response = getPopularMovies(pageNumber).execute();
+                if (cancelRequest)
+                    return;
+
+                if(response.code() == 200){
+                    List<MovieModel> list =
+                            new ArrayList<>(((MoviePopularResponse)response.body()).getPopularMovieList());
+
+                    if(pageNumber == 1){
+                        // postValue is used for background thread
+                        popularMovieList.postValue(list);
+                    }
+                    else{
+                        List<MovieModel> currentMovies = popularMovieList.getValue();
+                        currentMovies.addAll(list);
+
+                        popularMovieList.postValue(currentMovies);
+                    }
+                }
+                else{
+
+                    Log.v("tag", "Error: " + response.body().toString());
+
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                popularMovieList.postValue(null);
+            }
+
+        }
+
+        // Get Popular Movies
+        private Call<MoviePopularResponse> getPopularMovies(int pageNumber){
+            return ServiceRequest.getMovieApi().popularMovies(
                     Constants.API_KEY,
                     pageNumber
             );

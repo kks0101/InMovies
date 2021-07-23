@@ -1,8 +1,6 @@
 package com.inmovies.inmovies.repositories;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-
 import com.inmovies.inmovies.models.MovieModel;
 import com.inmovies.inmovies.request.ApiClient;
 
@@ -12,8 +10,10 @@ import java.util.List;
 // We are using MVVM architecture : This Singleton class acts as Repository to which ViewModel
 // interacts, to get the data from the data source
 public class MovieRepository {
+
     // Singleton Class
     private static MovieRepository instance;
+
     private ApiClient apiClient;
 
     private MovieRepository(){
@@ -26,13 +26,18 @@ public class MovieRepository {
         return instance;
     }
 
-    public LiveData<List<MovieModel>> getMovies(){
-        return apiClient.getMovies();
+    public LiveData<List<MovieModel>> getNowPlayingMovies(){
+        return apiClient.getNowPlayingMovies();
     }
 
-    // Calling the searchMovieApi
+    public LiveData<List<MovieModel>> getPopularMovies(){
+        return apiClient.getPopularMovies();
+    }
+
+    // call both the api: popular Movie as well as Now Playing
     public void searchMovies(int pageNumber){
-        apiClient.searchPopularMoviesApi(pageNumber);
+        apiClient.searchPopularMovies(pageNumber);
+        apiClient.searchNowPlayingMovies(pageNumber);
     }
 
 }
