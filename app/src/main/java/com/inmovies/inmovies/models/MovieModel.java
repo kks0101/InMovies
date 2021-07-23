@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 // specifies the data to be encapsulated for movie details fetched from API
 // implementing parcelable to share data from one UI component(Fragment/Activity) to other
+// e.g., get movie Detail for a given movie id
 public class MovieModel implements Parcelable {
 
     private String title;

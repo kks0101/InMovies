@@ -4,16 +4,21 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.inmovies.inmovies.models.MovieModel;
+import com.inmovies.inmovies.repositories.MovieRepository;
+
+import java.util.List;
+
 public class HomeViewModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
+    private MovieRepository movieRepository;
 
     public HomeViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+        movieRepository = MovieRepository.getInstance();
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public LiveData<List<MovieModel>> getMovies(){
+        return movieRepository.getMovies();
     }
+
 }

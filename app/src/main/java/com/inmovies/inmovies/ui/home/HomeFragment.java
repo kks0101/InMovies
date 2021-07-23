@@ -1,5 +1,6 @@
 package com.inmovies.inmovies.ui.home;
 
+import android.graphics.Movie;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import com.inmovies.inmovies.databinding.FragmentHomeBinding;
 import com.inmovies.inmovies.models.MovieModel;
 import com.inmovies.inmovies.request.ServiceRequest;
 import com.inmovies.inmovies.response.MovieNowPlayingResponse;
+import com.inmovies.inmovies.response.MoviePopularResponse;
 import com.inmovies.inmovies.utils.Constants;
 import com.inmovies.inmovies.utils.MovieApi;
 
@@ -50,13 +52,53 @@ public class HomeFragment extends Fragment {
 //            }
 //        });
         final Button button = binding.buttonHome;
+        final Button popularMovieButton = binding.buttonPopular;
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getNowPlayingMovies();
             }
         });
+
+        popularMovieButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getPopularMovies();
+            }
+        });
         return root;
+    }
+
+    public void getPopularMovies(){
+        MovieApi movieApi = ServiceRequest.getMovieApi();
+
+        Call<MoviePopularResponse> popularResponseCall = movieApi.popularMovies(
+                Constants.API_KEY,
+                "1"
+        );
+
+        popularResponseCall.enqueue(new Callback<MoviePopularResponse>() {
+            @Override
+            public void onResponse(Call<MoviePopularResponse> call, Response<MoviePopularResponse> response) {
+                if (response.code()==200){
+                    Log.v("tag", "Popular movies: " + response.body().toString());
+
+                    List<MovieModel> popularMovieList = new ArrayList<>(response.body().getPopularMovieList());
+
+                    for(MovieModel movie: popularMovieList){
+                        Log.v("tag", "Title: " + movie.getTitle());
+                    }
+                }
+                else{
+                    Log.v("tag", "Error : " + response.errorBody().toString() );
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MoviePopularResponse> call, Throwable t) {
+
+            }
+        });
     }
 
     public void getNowPlayingMovies(){
