@@ -1,5 +1,6 @@
 package com.inmovies.inmovies.adapters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnMovieClickListener{
 
     private List<MovieModel> movieList;
 
@@ -27,7 +28,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recyclerview_list_item_layout,parent,false);
-        return new RecyclerViewHolder(view);
+        return new RecyclerViewHolder(view, this);
     }
 
     @Override
@@ -50,5 +51,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void setMovieList(List<MovieModel> movieList) {
         this.movieList = movieList;
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void onMovieClick(int position) {
+        Log.v("tag", "Clicked on: " + movieList.get(position).getTitle());
     }
 }

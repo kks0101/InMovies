@@ -6,4 +6,7 @@
     <string name="appBarAttribution">Powered By</string>
     <string name="appBarBrowseMovies">Browse through movies</string>
     <string name="appBarHello">Hello!!</string>
+    <string name="trending_movies">Trending Movies</string>
+    <string name="now_playing_movies">Now Playing Movies</string>
+
 </resources>

@@ -18,24 +18,24 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Now Playing"
-            android:textSize="20dp"
+            android:text="@string/now_playing_movies"
+            android:textSize="@dimen/home_textview_size"
             android:layout_marginLeft="10dp"
-            android:textColor="@color/black"
+            android:layout_marginStart="10dp"
             />
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="230dp"
             android:id="@+id/now_playing_recyclerview"
             android:orientation="horizontal"
             />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Trending Movies"
-            android:textSize="20dp"
+            android:text="@string/trending_movies"
+            android:textSize="@dimen/home_textview_size"
             android:layout_marginLeft="10dp"
-            android:textColor="@color/black"
+            android:layout_marginStart="10dp"
             />
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
