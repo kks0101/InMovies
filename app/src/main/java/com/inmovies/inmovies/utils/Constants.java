@@ -14,4 +14,7 @@ public class Constants {
 
     // Thread pool size for Executor thread pool
     public static int THREAD_POOL = 4;
+
+    // Number of columns in Recycler View
+    public static int NUMBER_OF_COLUMNS = 2;
 }
