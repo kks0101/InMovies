@@ -19,8 +19,9 @@ public class MovieModel implements Parcelable {
     private int id;
     private float vote_average;
     private int vote_count;
+    private String release_date;
 
-    public MovieModel(String title, String poster_path, String overview, String backdrop_path, int id, float vote_average, int vote_count) {
+    public MovieModel(String title, String poster_path, String overview, String backdrop_path, int id, float vote_average, int vote_count, String release_date) {
         this.title = title;
         this.poster_path = poster_path;
         this.overview = overview;
@@ -28,7 +29,9 @@ public class MovieModel implements Parcelable {
         this.id = id;
         this.vote_average = vote_average;
         this.vote_count = vote_count;
+        this.release_date = release_date;
     }
+
 
     protected MovieModel(Parcel in) {
         title = in.readString();
@@ -38,6 +41,7 @@ public class MovieModel implements Parcelable {
         id = in.readInt();
         vote_average = in.readFloat();
         vote_count = in.readInt();
+        release_date = in.readString();
     }
 
     public static final Creator<MovieModel> CREATOR = new Creator<MovieModel>() {
@@ -51,6 +55,28 @@ public class MovieModel implements Parcelable {
             return new MovieModel[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return this.title;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(title);
+        parcel.writeString(poster_path);
+        parcel.writeString(overview);
+        parcel.writeString(backdrop_path);
+        parcel.writeInt(id);
+        parcel.writeFloat(vote_average);
+        parcel.writeInt(vote_count);
+        parcel.writeString(release_date);
+    }
 
     public String getTitle() {
         return title;
@@ -80,24 +106,11 @@ public class MovieModel implements Parcelable {
         return vote_count;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public String getRelease_date() {
+        return release_date;
     }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(title);
-        parcel.writeString(poster_path);
-        parcel.writeString(overview);
-        parcel.writeString(backdrop_path);
-        parcel.writeInt(id);
-        parcel.writeFloat(vote_average);
-        parcel.writeInt(vote_count);
-    }
-
-    @Override
-    public String toString() {
-        return this.title;
+    public static Creator<MovieModel> getCREATOR() {
+        return CREATOR;
     }
 }
