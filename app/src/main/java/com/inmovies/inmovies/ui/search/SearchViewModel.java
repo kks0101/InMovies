@@ -1,19 +1,27 @@
 package com.inmovies.inmovies.ui.search;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import com.inmovies.inmovies.models.MovieModel;
+import com.inmovies.inmovies.repositories.MovieRepository;
+
+import java.util.List;
+
 
 public class SearchViewModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
+    private MovieRepository movieRepository;
 
-    public SearchViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is search fragment");
+    public SearchViewModel(){
+        movieRepository = MovieRepository.getInstance();
+
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public LiveData<List<MovieModel>> getMoviesByQuery() {
+        return movieRepository.getMoviesByQuery();
+    }
+    public void searchMovies(String query, int pageNumber){
+        movieRepository.searchMovies(query, pageNumber);
     }
 }

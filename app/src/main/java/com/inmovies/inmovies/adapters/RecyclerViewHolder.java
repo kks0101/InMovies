@@ -33,5 +33,6 @@ public class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.
     @Override
     public void onClick(View view) {
         onMovieClickListener.onMovieClick(getBindingAdapterPosition(), view);
+        
     }
 }

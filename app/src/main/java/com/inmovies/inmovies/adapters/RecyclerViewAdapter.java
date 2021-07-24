@@ -6,10 +6,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.inmovies.inmovies.MobileNavigationDirections;
 import com.inmovies.inmovies.R;
 import com.inmovies.inmovies.models.MovieModel;
 import com.inmovies.inmovies.ui.home.HomeFragmentDirections;
@@ -58,13 +64,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public void onMovieClick(int position, View view) {
         Log.v("tag", "Clicked on: " + movieList.get(position).getTitle());
-
+        
         // To navigate to movie details fragment on Recycler View item click
         // Passing the movie parcelable object on respective movie click using Safe Args
-        HomeFragmentDirections.ActionNavigationHomeToNavigationMovieDetails
-                action = HomeFragmentDirections.actionNavigationHomeToNavigationMovieDetails(movieList.get(position));
+        MobileNavigationDirections.ActionGlobalNavigationMovieDetails action =
+                MobileNavigationDirections.actionGlobalNavigationMovieDetails(movieList.get(position));
 
         Navigation.findNavController(view).navigate(action);
+
 
     }
 }

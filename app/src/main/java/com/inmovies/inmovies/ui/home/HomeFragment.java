@@ -71,9 +71,10 @@ public class HomeFragment extends Fragment {
             public void onChanged(List<MovieModel> movieModels) {
                 // observing for data change
                 if(movieModels != null){
+                    nowPlayingRecyclerViewAdapter.setMovieList(movieModels);
                     for(MovieModel movie: movieModels){
                         Log.v("tag", "Now Playing Title: " + movie.getTitle());
-                        nowPlayingRecyclerViewAdapter.setMovieList(movieModels);
+
 
                     }
                 }
@@ -86,9 +87,10 @@ public class HomeFragment extends Fragment {
             @Override
             public void onChanged(List<MovieModel> movieModels) {
                 if(movieModels != null){
+                    popularMovieRecyclerViewAdapter.setMovieList(movieModels);
                     for(MovieModel movie: movieModels){
                         Log.v("tag", "Popular Movie Title: " + movie.getTitle());
-                        popularMovieRecyclerViewAdapter.setMovieList(movieModels);
+
                     }
                 }
             }

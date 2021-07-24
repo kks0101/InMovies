@@ -2,6 +2,7 @@ package com.inmovies.inmovies.utils;
 
 import com.inmovies.inmovies.response.MovieNowPlayingResponse;
 import com.inmovies.inmovies.response.MoviePopularResponse;
+import com.inmovies.inmovies.response.MoviesByQueryResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -24,6 +25,15 @@ public interface MovieApi {
     @GET("/3/movie/now_playing")
     Call<MovieNowPlayingResponse> nowPlayingMovie(
             @Query("api_key") String api_key,
+            @Query("page") int page
+    );
+
+    // Get the movies by query
+    // https://api.themoviedb.org/3/search/movie?api_key=07954711307c2f5ace3eee417e423cef&query=Jack&page=1
+    @GET("3/search/movie")
+    Call<MoviesByQueryResponse> queryMovies(
+            @Query("api_key") String api_key,
+            @Query("query") String query,
             @Query("page") int page
     );
 

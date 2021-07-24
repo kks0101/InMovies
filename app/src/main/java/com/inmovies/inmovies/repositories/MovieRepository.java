@@ -34,10 +34,18 @@ public class MovieRepository {
         return apiClient.getPopularMovies();
     }
 
+    public LiveData<List<MovieModel>> getMoviesByQuery(){
+        return apiClient.getMoviesByQuery();
+    }
+
     // call both the api: popular Movie as well as Now Playing
     public void searchMovies(int pageNumber){
         apiClient.searchPopularMovies(pageNumber);
         apiClient.searchNowPlayingMovies(pageNumber);
+    }
+
+    public void searchMovies(String query, int pageNumber){
+        apiClient.searchMoviesByQuery(query, pageNumber);
     }
 
 }

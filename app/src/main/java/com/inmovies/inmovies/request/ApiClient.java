@@ -9,6 +9,7 @@ import com.inmovies.inmovies.AppExecutors;
 import com.inmovies.inmovies.models.MovieModel;
 import com.inmovies.inmovies.response.MovieNowPlayingResponse;
 import com.inmovies.inmovies.response.MoviePopularResponse;
+import com.inmovies.inmovies.response.MoviesByQueryResponse;
 import com.inmovies.inmovies.utils.Constants;
 
 import java.io.IOException;
@@ -29,13 +30,16 @@ public class ApiClient {
 
     // two lists for two api calls : one for now playing movies, other for popular movies
     private static MutableLiveData<List<MovieModel>> nowPlayingMovieList, popularMovieList;
+    private static MutableLiveData<List<MovieModel>> movieListByQuery;
 
     private RetrieveNowPlayingMoviesRunnable retrieveNowPlayingMoviesRunnable;
     private RetrievePopularMoviesRunnable retrievePopularMoviesRunnable;
+    private RetrieveMoviesByQueryRunnable retrieveMoviesByQueryRunnable;
 
     private ApiClient(){
         nowPlayingMovieList = new MutableLiveData<>();
         popularMovieList = new MutableLiveData<>();
+        movieListByQuery = new MutableLiveData<>();
     }
 
     public static ApiClient getInstance(){
@@ -50,6 +54,10 @@ public class ApiClient {
 
     public LiveData<List<MovieModel>> getPopularMovies(){
         return popularMovieList;
+    }
+
+    public LiveData<List<MovieModel>> getMoviesByQuery(){
+        return movieListByQuery;
     }
 
     public void searchNowPlayingMovies(int pageNumber){
@@ -96,6 +104,87 @@ public class ApiClient {
 
     }
 
+    public void searchMoviesByQuery(String query, int pageNumber){
+        if(retrieveMoviesByQueryRunnable!=null)
+            retrieveMoviesByQueryRunnable = null;
+        retrieveMoviesByQueryRunnable = new RetrieveMoviesByQueryRunnable(query, pageNumber);
+
+        final Future handler = AppExecutors.getInstance().getScheduledExecutorService()
+                .submit(retrieveMoviesByQueryRunnable);
+
+        AppExecutors.getInstance().getScheduledExecutorService().schedule(new Runnable() {
+            @Override
+            public void run() {
+                handler.cancel(true);
+            }
+        }, 5000, TimeUnit.MILLISECONDS);
+    }
+
+
+    private class RetrieveMoviesByQueryRunnable implements Runnable{
+
+        private int pageNumber;
+        private String query;
+        private boolean cancelRequest;
+
+        public RetrieveMoviesByQueryRunnable(String query, int pageNumber) {
+            this.pageNumber = pageNumber;
+            this.query = query;
+            cancelRequest = false;
+        }
+
+
+        @Override
+        public void run() {
+
+            try {
+                Response response = getMoviesByQuery(query, pageNumber).execute();
+                if (cancelRequest)
+                    return;
+
+                if(response.code() == 200){
+                    Log.v("tags", response.body().toString());
+                    List<MovieModel> list =
+                            new ArrayList<>(((MoviesByQueryResponse)response.body()).getMoviesByQuery());
+
+                    if(pageNumber == 1){
+                        // postValue is used for background thread
+                        movieListByQuery.postValue(list);
+                    }
+                    else{
+                        List<MovieModel> currentMovies = movieListByQuery.getValue();
+                        currentMovies.addAll(list);
+
+                        movieListByQuery.postValue(currentMovies);
+                    }
+                }
+                else{
+
+                    Log.v("tag", "Error: " + response.body().toString());
+
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                movieListByQuery.postValue(null);
+            }
+
+        }
+
+        // Get Now Playing Movies
+        private Call<MoviesByQueryResponse> getMoviesByQuery(String query, int pageNumber){
+            return ServiceRequest.getMovieApi().queryMovies(
+                    Constants.API_KEY,
+                    query,
+                    pageNumber
+            );
+        }
+
+        private void cancelRequest(){
+            Log.v("tag", "Cancelling Request");
+            cancelRequest = true;
+        }
+    }
 
 
     // Retrieving data from REST API by Runnable Class
