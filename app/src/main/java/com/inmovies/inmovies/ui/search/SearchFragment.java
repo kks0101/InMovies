@@ -49,12 +49,13 @@ public class SearchFragment extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 searchViewModel.searchMovies(query, 1);
-
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                if(newText!=null)
+                    searchViewModel.searchMovies(newText, 1);
                 return false;
             }
         });
