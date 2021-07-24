@@ -54,15 +54,6 @@ public class HomeFragment extends Fragment {
         observeChanges();
         searchMovies(1);
 
-//        final Button button = binding.buttonHome;
-//
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                searchMovies(1);
-//            }
-//        });
-
         return root;
     }
 
