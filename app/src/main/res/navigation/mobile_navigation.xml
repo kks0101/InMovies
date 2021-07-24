@@ -9,7 +9,11 @@
         android:id="@+id/navigation_home"
         android:name="com.inmovies.inmovies.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_movie_details"
+            app:destination="@id/navigation_movie_details" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_bookmarks"
@@ -22,4 +26,13 @@
         android:name="com.inmovies.inmovies.ui.search.SearchFragment"
         android:label="@string/title_search"
         tools:layout="@layout/fragment_search" />
+    <fragment
+        android:id="@+id/navigation_movie_details"
+        android:name="com.inmovies.inmovies.ui.moviedetails.MovieDetailsFragment"
+        android:label="fragment_movie_details"
+        tools:layout="@layout/fragment_movie_details" >
+        <argument
+            android:name="MovieDetail"
+            app:argType="com.inmovies.inmovies.models.MovieModel" />
+    </fragment>
 </navigation>
