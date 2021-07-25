@@ -13,15 +13,12 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.inmovies.inmovies.adapters.RecyclerViewAdapter;
-import com.inmovies.inmovies.database.BookmarkEntity;
 import com.inmovies.inmovies.databinding.FragmentBookmarksBinding;
 
 import com.inmovies.inmovies.models.MovieModel;
 import com.inmovies.inmovies.repositories.ViewModelFactory;
 import com.inmovies.inmovies.utils.Constants;
 
-
-import java.util.ArrayList;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -63,16 +60,18 @@ public class BookmarksFragment extends Fragment {
 
         // Using RxJava to get details from Bookmark Database
 
-        ArrayList<MovieModel> bookmarkList = new ArrayList<>();
+        //ArrayList<MovieModel> bookmarkList = new ArrayList<>();
         disposable.add(bookmarksViewModel.getAllBookmarks()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
         .subscribe(movieList -> {
-            for(BookmarkEntity bookmark: movieList){
-                Log.v("bookmark", bookmark.getTitle());
-                bookmarkList.add(new MovieModel(bookmark));
-                bookmarkRecyclerViewAdapter.setMovieList(bookmarkList);
+            bookmarkRecyclerViewAdapter.setMovieList(movieList);
+            for(MovieModel movie: movieList){
+                Log.v("bookmark", movie.getTitle());
+                //bookmarkList.add(new MovieModel(bookmark));
+
             }
+
 
 
                 },throwable -> Log.e("bookmark", "Unable to get bookmarks", throwable)

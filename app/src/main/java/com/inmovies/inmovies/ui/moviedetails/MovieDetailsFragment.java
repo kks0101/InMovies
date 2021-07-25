@@ -18,7 +18,6 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.inmovies.inmovies.R;
-import com.inmovies.inmovies.database.BookmarkEntity;
 import com.inmovies.inmovies.databinding.FragmentMovieDetailsBinding;
 import com.inmovies.inmovies.models.MovieModel;
 import com.inmovies.inmovies.repositories.BookmarkRepository;
@@ -91,14 +90,14 @@ public class MovieDetailsFragment extends Fragment {
         bookmarksViewModel.getBookmarkById(movie.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<BookmarkEntity>() {
+                .subscribe(new SingleObserver<MovieModel>() {
                     @Override
                     public void onSubscribe(@NotNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onSuccess(@NotNull BookmarkEntity bookmarkEntity) {
+                    public void onSuccess(@NotNull MovieModel movieModel) {
                         addBookmark.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_baseline_beenhere_24));
                     }
 
@@ -120,14 +119,14 @@ public class MovieDetailsFragment extends Fragment {
                 bookmarksViewModel.getBookmarkById(movie.getId())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new SingleObserver<BookmarkEntity>() {
+                        .subscribe(new SingleObserver<MovieModel>() {
                             @Override
                             public void onSubscribe(@NotNull Disposable d) {
 
                             }
 
                             @Override
-                            public void onSuccess(@NotNull BookmarkEntity bookmarkEntity) {
+                            public void onSuccess(@NotNull MovieModel movieModel) {
                                 disposable.add(bookmarksViewModel.deleteBookmarkById(movie.getId())
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
@@ -145,7 +144,8 @@ public class MovieDetailsFragment extends Fragment {
 
                             @Override
                             public void onError(@NotNull Throwable e) {
-                                disposable.add(bookmarksViewModel.insert(new BookmarkEntity(movie))
+                                Log.v("bookmark", "trying to add bookmark");
+                                disposable.add(bookmarksViewModel.insert(movie)
                                         .subscribeOn(Schedulers.io())
                                         .observeOn(AndroidSchedulers.mainThread())
                                         .subscribe(()->{

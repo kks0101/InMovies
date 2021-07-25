@@ -4,6 +4,8 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
+import com.inmovies.inmovies.models.MovieModel;
+
 import java.util.List;
 
 import io.reactivex.Completable;
@@ -14,18 +16,18 @@ import io.reactivex.Single;
 public interface BookmarkDao {
 
     @Insert()
-    Completable insert(BookmarkEntity bookmarkEntity);
+    Completable insert(MovieModel movieModel);
 
-    @Query("DELETE FROM bookmark_table")
+    @Query("DELETE FROM movie_table")
     Completable deleteAll();
 
-    @Query("SELECT * FROM bookmark_table")
-    Flowable<List<BookmarkEntity>> getAllBookmarks();
+    @Query("SELECT * FROM movie_table")
+    Flowable<List<MovieModel>> getAllBookmarks();
 
-    @Query("SELECT * FROM bookmark_table WHERE id = :id")
-    Single<BookmarkEntity> getBookmarkById(int id);
+    @Query("SELECT * FROM movie_table WHERE id = :id")
+    Single<MovieModel> getBookmarkById(int id);
 
-    @Query("DELETE FROM bookmark_table WHERE id = :id")
+    @Query("DELETE FROM movie_table WHERE id = :id")
     Completable deleteBookmarkById(int id);
 
 

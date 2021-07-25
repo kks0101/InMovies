@@ -1,37 +1,39 @@
 package com.inmovies.inmovies.database;
 
+import com.inmovies.inmovies.models.MovieModel;
+
 import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
 
-public class BookmarkDbClient {
+public class DatabaseClient {
 
     private final BookmarkDao bookmarkDao;
-    private static BookmarkDbClient instance;
+    private static DatabaseClient instance;
 
-    public static BookmarkDbClient getInstance(BookmarkDao  bookmarkDao){
+    public static DatabaseClient getInstance(BookmarkDao  bookmarkDao){
         if(instance == null){
-            instance = new BookmarkDbClient(bookmarkDao);
+            instance = new DatabaseClient(bookmarkDao);
         }
         return instance;
     }
 
-    private BookmarkDbClient(BookmarkDao bookmarkDao){
+    private DatabaseClient(BookmarkDao bookmarkDao){
         this.bookmarkDao = bookmarkDao;
     }
 
-    public Flowable<List<BookmarkEntity>> getAllBookmarks(){
+    public Flowable<List<MovieModel>> getAllBookmarks(){
         return bookmarkDao.getAllBookmarks();
     }
 
-    public Single<BookmarkEntity> getBookmarkById(int id){
+    public Single<MovieModel> getBookmarkById(int id){
         return bookmarkDao. getBookmarkById(id);
     }
 
-    public Completable insert(BookmarkEntity bookmarkEntity){
-        return bookmarkDao.insert(bookmarkEntity);
+    public Completable insert(MovieModel MovieModel){
+        return bookmarkDao.insert(MovieModel);
     }
 
     public Completable deleteBookmarkById(int id){

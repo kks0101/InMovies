@@ -3,7 +3,7 @@ package com.inmovies.inmovies.ui.bookmarks;
 import android.content.Context;
 import androidx.lifecycle.ViewModel;
 
-import com.inmovies.inmovies.database.BookmarkEntity;
+import com.inmovies.inmovies.models.MovieModel;
 import com.inmovies.inmovies.repositories.BookmarkRepository;
 
 import java.util.List;
@@ -20,19 +20,19 @@ public class BookmarksViewModel extends ViewModel {
         bookmarkRepository = BookmarkRepository.getInstance(context);
     }
 
-    public Completable insert(BookmarkEntity bookmarkEntity){
-        return bookmarkRepository.insert(bookmarkEntity);
+    public Completable insert(MovieModel movieModel){
+        return bookmarkRepository.insert(movieModel);
     }
 
     public Completable deleteAll(){
         return bookmarkRepository.deleteAll();
     }
 
-    public Flowable<List<BookmarkEntity>> getAllBookmarks(){
+    public Flowable<List<MovieModel>> getAllBookmarks(){
         return bookmarkRepository.getAllBookmarks();
     }
 
-    public Single<BookmarkEntity> getBookmarkById(int id){
+    public Single<MovieModel> getBookmarkById(int id){
         return bookmarkRepository.getBookmarkById(id);
     }
 

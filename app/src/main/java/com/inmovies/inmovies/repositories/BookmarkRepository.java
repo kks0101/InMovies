@@ -2,9 +2,9 @@ package com.inmovies.inmovies.repositories;
 
 import android.content.Context;
 
-import com.inmovies.inmovies.database.BookmarkDatabase;
-import com.inmovies.inmovies.database.BookmarkDbClient;
-import com.inmovies.inmovies.database.BookmarkEntity;
+import com.inmovies.inmovies.database.AppDatabase;
+import com.inmovies.inmovies.database.DatabaseClient;
+import com.inmovies.inmovies.models.MovieModel;
 
 import java.util.List;
 
@@ -15,11 +15,11 @@ import io.reactivex.Single;
 public class BookmarkRepository {
 
     private static BookmarkRepository instance;
-    private BookmarkDbClient bookmarkDbClient;
+    private DatabaseClient databaseClient;
 
     private BookmarkRepository(Context context){
-        BookmarkDatabase  db = BookmarkDatabase.getDatabase(context);
-        bookmarkDbClient = BookmarkDbClient.getInstance(db.bookmarkDao());
+        AppDatabase db = AppDatabase.getDatabase(context);
+        databaseClient = DatabaseClient.getInstance(db.bookmarkDao());
     }
 
     public static BookmarkRepository getInstance(Context context){
@@ -28,24 +28,24 @@ public class BookmarkRepository {
         return instance;
     }
 
-    public Completable insert(BookmarkEntity bookmarkEntity){
-        return bookmarkDbClient.insert(bookmarkEntity);
+    public Completable insert(MovieModel movieModel){
+        return databaseClient.insert(movieModel);
     }
 
     public Completable deleteAll(){
-        return bookmarkDbClient.deleteAll();
+        return databaseClient.deleteAll();
     }
 
-    public Flowable<List<BookmarkEntity>> getAllBookmarks(){
-        return bookmarkDbClient.getAllBookmarks();
+    public Flowable<List<MovieModel>> getAllBookmarks(){
+        return databaseClient.getAllBookmarks();
     }
 
-    public Single<BookmarkEntity> getBookmarkById(int id){
-        return bookmarkDbClient.getBookmarkById(id);
+    public Single<MovieModel> getBookmarkById(int id){
+        return databaseClient.getBookmarkById(id);
     }
 
     public Completable deleteBookmarkById(int id){
-        return bookmarkDbClient.deleteBookmarkById(id);
+        return databaseClient.deleteBookmarkById(id);
     }
 
 }

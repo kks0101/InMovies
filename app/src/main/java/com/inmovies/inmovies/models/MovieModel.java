@@ -3,32 +3,31 @@ package com.inmovies.inmovies.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.inmovies.inmovies.database.BookmarkEntity;
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 // specifies the data to be encapsulated for movie details fetched from API
 // implementing parcelable to share data from one UI component(Fragment/Activity) to other
 // e.g., get movie Detail for a given movie id
+@Entity(tableName = "movie_table")
 public class MovieModel implements Parcelable {
 
     private String title;
     private String poster_path;
     private String overview;
     private String backdrop_path;
+
+    @PrimaryKey
+    @NonNull
     private int id;
     private float vote_average;
     private int vote_count;
     private String release_date;
 
-    public MovieModel(BookmarkEntity bookmarkEntity){
-        this.title = bookmarkEntity.getTitle();
-        this.poster_path = bookmarkEntity.getPoster_path();
-        this.overview = bookmarkEntity.getOverview();
-        this.backdrop_path = bookmarkEntity.getBackdrop_path();
-        this.id = bookmarkEntity.getId();
-        this.vote_average = bookmarkEntity.getVote_average();
-        this.vote_count = bookmarkEntity.getVote_count();
-        this.release_date = bookmarkEntity.getRelease_date();
-    }
+    
+    private Long timestamp;
+
 
     public MovieModel(String title, String poster_path, String overview, String backdrop_path, int id, float vote_average, int vote_count, String release_date) {
         this.title = title;
@@ -39,6 +38,8 @@ public class MovieModel implements Parcelable {
         this.vote_average = vote_average;
         this.vote_count = vote_count;
         this.release_date = release_date;
+
+        timestamp = System.currentTimeMillis();
     }
 
 
@@ -121,5 +122,13 @@ public class MovieModel implements Parcelable {
 
     public static Creator<MovieModel> getCREATOR() {
         return CREATOR;
+    }
+
+    public Long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
     }
 }
