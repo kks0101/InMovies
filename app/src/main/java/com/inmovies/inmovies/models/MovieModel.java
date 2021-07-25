@@ -3,9 +3,7 @@ package com.inmovies.inmovies.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import androidx.annotation.NonNull;
-
-import org.jetbrains.annotations.NotNull;
+import com.inmovies.inmovies.database.BookmarkEntity;
 
 // specifies the data to be encapsulated for movie details fetched from API
 // implementing parcelable to share data from one UI component(Fragment/Activity) to other
@@ -20,6 +18,17 @@ public class MovieModel implements Parcelable {
     private float vote_average;
     private int vote_count;
     private String release_date;
+
+    public MovieModel(BookmarkEntity bookmarkEntity){
+        this.title = bookmarkEntity.getTitle();
+        this.poster_path = bookmarkEntity.getPoster_path();
+        this.overview = bookmarkEntity.getOverview();
+        this.backdrop_path = bookmarkEntity.getBackdrop_path();
+        this.id = bookmarkEntity.getId();
+        this.vote_average = bookmarkEntity.getVote_average();
+        this.vote_count = bookmarkEntity.getVote_count();
+        this.release_date = bookmarkEntity.getRelease_date();
+    }
 
     public MovieModel(String title, String poster_path, String overview, String backdrop_path, int id, float vote_average, int vote_count, String release_date) {
         this.title = title;

@@ -2,7 +2,11 @@ package com.inmovies.inmovies.ui.moviedetails;
 
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,15 +15,30 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import com.inmovies.inmovies.R;
+import com.inmovies.inmovies.database.BookmarkEntity;
 import com.inmovies.inmovies.databinding.FragmentMovieDetailsBinding;
 import com.inmovies.inmovies.models.MovieModel;
+import com.inmovies.inmovies.repositories.BookmarkRepository;
+import com.inmovies.inmovies.repositories.ViewModelFactory;
+import com.inmovies.inmovies.ui.bookmarks.BookmarksViewModel;
 import com.inmovies.inmovies.utils.Constants;
 
-import org.w3c.dom.Text;
+import org.jetbrains.annotations.NotNull;
+
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class MovieDetailsFragment extends Fragment {
 
     private FragmentMovieDetailsBinding binding;
+    private final CompositeDisposable disposable = new CompositeDisposable();
+    private BookmarksViewModel bookmarksViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,14 +71,105 @@ public class MovieDetailsFragment extends Fragment {
         final TextView ratingTextView = binding.content.ratingTextView;
         ratingTextView.setText(String.valueOf(movie.getVote_average()));
 
+        //set overview
         final TextView overviewTextView = binding.content.overviewTextView;
         overviewTextView.setText(movie.getOverview());
 
         // set the release date
         final TextView releaseDateTextView = binding.content.releaseDateTextView;
         releaseDateTextView.setText(movie.getRelease_date());
+        ViewModelFactory viewModelFactory = new ViewModelFactory(getContext());
+        bookmarksViewModel =
+                new ViewModelProvider(this, viewModelFactory).get(BookmarksViewModel.class);
+
+        final BookmarkRepository bookmarkRepository = BookmarkRepository.getInstance(getContext());
+        final FloatingActionButton addBookmark = binding.bookmark;
+
+
+        // should be modified: going by this approach for now
+        // Update the bookmark image
+        bookmarksViewModel.getBookmarkById(movie.getId())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<BookmarkEntity>() {
+                    @Override
+                    public void onSubscribe(@NotNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(@NotNull BookmarkEntity bookmarkEntity) {
+                        addBookmark.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_baseline_beenhere_24));
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        addBookmark.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_bookmark_24));
+                    }
+                });
+
+
+        addBookmark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //disable bookmark button, until bookmark database transaction done
+                addBookmark.setEnabled(false);
+                // check if this movie is already added to Bookmark:
+                // if yes -> remove it from the bookmark
+                // if no -> add it to bookmark
+                bookmarksViewModel.getBookmarkById(movie.getId())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new SingleObserver<BookmarkEntity>() {
+                            @Override
+                            public void onSubscribe(@NotNull Disposable d) {
+
+                            }
+
+                            @Override
+                            public void onSuccess(@NotNull BookmarkEntity bookmarkEntity) {
+                                disposable.add(bookmarksViewModel.deleteBookmarkById(movie.getId())
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(()->{
+
+                                    Snackbar.make(root, "Bookmark removed", Snackbar.LENGTH_LONG).show();
+                                    addBookmark.setImageDrawable(ContextCompat.getDrawable(getActivity(),
+                                            R.drawable.ic_bookmark_24));
+                                },
+                                        throwable -> {
+                                            Log.e("bookmark", "Error occurred while deleting bookmark");
+                                        }));
+                                addBookmark.setEnabled(true);
+                            }
+
+                            @Override
+                            public void onError(@NotNull Throwable e) {
+                                disposable.add(bookmarksViewModel.insert(new BookmarkEntity(movie))
+                                        .subscribeOn(Schedulers.io())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(()->{
+                                                    addBookmark.setEnabled(true);
+                                                    Snackbar.make(root, "Bookmark added", Snackbar.LENGTH_LONG).show();
+                                                    addBookmark.setImageDrawable(ContextCompat.getDrawable(getActivity(),
+                                                            R.drawable.ic_baseline_beenhere_24));
+                                                },
+                                                throwable -> {
+                                                    addBookmark.setEnabled(true);
+                                                    Log.e("bookmark", "Unable to add bookmark");
+                                                }));
+                            }
+                        });
+
+
+            }
+        });
+
         return root;
     }
+
+
+
 
     @Override
     public void onDestroyView() {

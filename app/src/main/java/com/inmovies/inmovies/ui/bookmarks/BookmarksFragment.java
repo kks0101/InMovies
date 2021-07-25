@@ -1,40 +1,82 @@
 package com.inmovies.inmovies.ui.bookmarks;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.inmovies.inmovies.adapters.RecyclerViewAdapter;
+import com.inmovies.inmovies.database.BookmarkEntity;
 import com.inmovies.inmovies.databinding.FragmentBookmarksBinding;
+
+import com.inmovies.inmovies.models.MovieModel;
+import com.inmovies.inmovies.repositories.ViewModelFactory;
+import com.inmovies.inmovies.utils.Constants;
+
+
+import java.util.ArrayList;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class BookmarksFragment extends Fragment {
 
-    private BookmarksViewModel dashboardViewModel;
+    private BookmarksViewModel bookmarksViewModel;
     private FragmentBookmarksBinding binding;
+    private RecyclerView bookmarkRecyclerView;
+    private RecyclerViewAdapter bookmarkRecyclerViewAdapter;
+
+    private final CompositeDisposable disposable = new CompositeDisposable();
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        dashboardViewModel =
-                new ViewModelProvider(this).get(BookmarksViewModel.class);
+
+
+        ViewModelFactory viewModelFactory = new ViewModelFactory(getContext());
+
+        bookmarksViewModel =
+                new ViewModelProvider(this, viewModelFactory).get(BookmarksViewModel.class);
+
 
         binding = FragmentBookmarksBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textDashboard;
-        dashboardViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+        bookmarkRecyclerView = binding.bookmarkRecyclerview;
+        bookmarkRecyclerViewAdapter = new RecyclerViewAdapter();
+        bookmarkRecyclerView.setAdapter(bookmarkRecyclerViewAdapter);
+        bookmarkRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), Constants.NUMBER_OF_COLUMNS));
+
+        getAllBookmarks();
         return root;
+    }
+
+    public void getAllBookmarks(){
+
+        // Using RxJava to get details from Bookmark Database
+
+        ArrayList<MovieModel> bookmarkList = new ArrayList<>();
+        disposable.add(bookmarksViewModel.getAllBookmarks()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(movieList -> {
+            for(BookmarkEntity bookmark: movieList){
+                Log.v("bookmark", bookmark.getTitle());
+                bookmarkList.add(new MovieModel(bookmark));
+                bookmarkRecyclerViewAdapter.setMovieList(bookmarkList);
+            }
+
+
+                },throwable -> Log.e("bookmark", "Unable to get bookmarks", throwable)
+                ));
     }
 
     @Override
