@@ -4,7 +4,7 @@ import com.inmovies.inmovies.response.MovieNowPlayingResponse;
 import com.inmovies.inmovies.response.MoviePopularResponse;
 import com.inmovies.inmovies.response.MoviesByQueryResponse;
 
-import retrofit2.Call;
+import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
@@ -15,7 +15,7 @@ public interface MovieApi {
     // Get the popular movie details
     // https://api.themoviedb.org/3/movie/popular?api_key=07954711307c2f5ace3eee417e423cef&page=1
     @GET("/3/movie/popular")
-    Call<MoviePopularResponse> popularMovies(
+    Observable<MoviePopularResponse> popularMovies(
             @Query("api_key") String api_key,
             @Query("page") int page
     );
@@ -23,7 +23,7 @@ public interface MovieApi {
     // Get the now playing movie details
     // https://api.themoviedb.org/3/movie/now_playing?api_key=07954711307c2f5ace3eee417e423cef&page=1
     @GET("/3/movie/now_playing")
-    Call<MovieNowPlayingResponse> nowPlayingMovie(
+    Observable<MovieNowPlayingResponse> nowPlayingMovie(
             @Query("api_key") String api_key,
             @Query("page") int page
     );
@@ -31,7 +31,7 @@ public interface MovieApi {
     // Get the movies by query
     // https://api.themoviedb.org/3/search/movie?api_key=07954711307c2f5ace3eee417e423cef&query=Jack&page=1
     @GET("3/search/movie")
-    Call<MoviesByQueryResponse> queryMovies(
+    Observable<MoviesByQueryResponse> queryMovies(
             @Query("api_key") String api_key,
             @Query("query") String query,
             @Query("page") int page
