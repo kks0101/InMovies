@@ -48,4 +48,11 @@ public class MovieRepository {
         apiClient.searchMoviesByQuery(query, pageNumber);
     }
 
+    public LiveData<MovieModel> getMovieDetails(){
+        return apiClient.getMovieDetails();
+    }
+
+    public void searchMovieDetails(int movie_id){
+        apiClient.searchMovieDetails(movie_id);
+    }
 }

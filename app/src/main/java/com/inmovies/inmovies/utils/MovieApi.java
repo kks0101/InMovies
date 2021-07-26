@@ -1,11 +1,13 @@
 package com.inmovies.inmovies.utils;
 
+import com.inmovies.inmovies.response.MovieDetailsResponse;
 import com.inmovies.inmovies.response.MovieNowPlayingResponse;
 import com.inmovies.inmovies.response.MoviePopularResponse;
 import com.inmovies.inmovies.response.MoviesByQueryResponse;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface MovieApi {
@@ -35,6 +37,15 @@ public interface MovieApi {
             @Query("api_key") String api_key,
             @Query("query") String query,
             @Query("page") int page
+    );
+
+    // Get details of specific movie
+    @GET("3/movie/{movie_id}")
+    Observable<MovieDetailsResponse> getMovieDetails(
+
+            @Path("movie_id") int id,
+            @Query("api_key") String api_key
+
     );
 
 }

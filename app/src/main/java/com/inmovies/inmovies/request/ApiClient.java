@@ -24,6 +24,7 @@ public class ApiClient {
     // two lists for two api calls : one for now playing movies, other for popular movies
     private static MutableLiveData<List<MovieModel>> nowPlayingMovieList, popularMovieList;
     private static MutableLiveData<List<MovieModel>> movieListByQuery;
+    private static MutableLiveData<MovieModel> movieDetailsByID;
 
     // disposable
     private CompositeDisposable disposable = new CompositeDisposable();
@@ -35,6 +36,7 @@ public class ApiClient {
         nowPlayingMovieList = new MutableLiveData<>();
         popularMovieList = new MutableLiveData<>();
         movieListByQuery = new MutableLiveData<>();
+        movieDetailsByID = new MutableLiveData<>();
         movieApi = ServiceRequest.getMovieApi();
     }
 
@@ -54,6 +56,31 @@ public class ApiClient {
 
     public LiveData<List<MovieModel>> getMoviesByQuery(){
         return movieListByQuery;
+    }
+
+    public LiveData<MovieModel> getMovieDetails(){
+        return movieDetailsByID;
+    }
+
+    public void searchMovieDetails(int movie_id){
+        disposable.add(movieApi.getMovieDetails(
+                movie_id,
+                Constants.API_KEY
+
+        ).subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .map(movieDetailsResponse -> movieDetailsResponse.getMovie())
+        .subscribe(this::handleMovieDetailsSuccess, this::handleMovieDetailsError));
+    }
+
+    private void handleMovieDetailsError(Throwable throwable) {
+        movieDetailsByID.setValue(null);
+        Log.e("response", "Unable to get details: " + throwable.getMessage());
+    }
+
+    private void handleMovieDetailsSuccess(MovieModel movieModel) {
+        Log.v("details", movieModel.toString());
+        movieDetailsByID.setValue(movieModel);
     }
 
     public void searchNowPlayingMovies(int pageNumber){

@@ -30,4 +30,10 @@ public class HomeViewModel extends ViewModel {
         movieRepository.searchMovies(pageNumber);
     }
 
+    public LiveData<MovieModel> getMovieDetailsById(){
+        return movieRepository.getMovieDetails();
+    }
+    public void searchMovieDetails(int movie_id){
+        movieRepository.searchMovieDetails(movie_id);
+    }
 }

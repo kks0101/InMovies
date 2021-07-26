@@ -54,6 +54,19 @@ public class HomeFragment extends Fragment {
         observeChanges();
         searchMovies(1);
 
+//        homeViewModel.searchMovieDetails(739542);
+//        // testing movie details api
+//        homeViewModel.getMovieDetailsById().observe(getViewLifecycleOwner(), new Observer<MovieModel>() {
+//            @Override
+//            public void onChanged(MovieModel movieModel) {
+//                if(movieModel!=null){
+//                    Log.v("details","home fragment "  +  movieModel.toString());
+//                }
+//                else{
+//                    Log.v("details", "Unabel to get Details");
+//                }
+//            }
+//        });
         return root;
     }
 
