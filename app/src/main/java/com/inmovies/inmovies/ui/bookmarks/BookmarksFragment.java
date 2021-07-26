@@ -38,12 +38,13 @@ public class BookmarksFragment extends Fragment {
 
 
 
-        bookmarksViewModel =
-                new ViewModelProvider(this).get(BookmarksViewModel.class);
+
 
 
         binding = FragmentBookmarksBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        ViewModelFactory viewModelFactory = new ViewModelFactory(getActivity().getApplication());
+        bookmarksViewModel = new ViewModelProvider(this, viewModelFactory).get(BookmarksViewModel.class);
 
         bookmarkRecyclerView = binding.bookmarkRecyclerview;
         bookmarkRecyclerViewAdapter = new RecyclerViewAdapter();

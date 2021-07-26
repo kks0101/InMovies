@@ -22,11 +22,11 @@ import com.inmovies.inmovies.R;
 import com.inmovies.inmovies.databinding.FragmentMovieDetailsBinding;
 import com.inmovies.inmovies.models.MovieModel;
 import com.inmovies.inmovies.ui.bookmarks.BookmarksViewModel;
+import com.inmovies.inmovies.ui.bookmarks.ViewModelFactory;
 import com.inmovies.inmovies.utils.Constants;
 
 import org.jetbrains.annotations.NotNull;
 
-import io.reactivex.Flowable;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -77,9 +77,9 @@ public class MovieDetailsFragment extends Fragment {
         // set the release date
         final TextView releaseDateTextView = binding.content.releaseDateTextView;
         releaseDateTextView.setText(movie.getRelease_date());
-
+        ViewModelFactory viewModelFactory = new ViewModelFactory(getActivity().getApplication());
         bookmarksViewModel =
-                new ViewModelProvider(this).get(BookmarksViewModel.class);
+                new ViewModelProvider(this, viewModelFactory).get(BookmarksViewModel.class);
 
         final FloatingActionButton addBookmark = binding.bookmark;
         final FloatingActionButton shareButton = binding.shareButton;
@@ -152,7 +152,7 @@ public class MovieDetailsFragment extends Fragment {
                                             R.drawable.ic_bookmark_24));
                                 },
                                         throwable -> {
-                                            Log.e("bookmark", "Error occurred while deleting bookmark");
+                                            Log.e("bookmark", "Error occurred while deleting bookmark" + throwable.getMessage());
                                         }));
                                 addBookmark.setEnabled(true);
                             }
@@ -171,7 +171,7 @@ public class MovieDetailsFragment extends Fragment {
                                                 },
                                                 throwable -> {
                                                     addBookmark.setEnabled(true);
-                                                    Log.e("bookmark", "Unable to add bookmark");
+                                                    Log.e("bookmark", "Unable to add bookmark" + throwable.getMessage());
                                                 }));
                             }
                         });
@@ -182,8 +182,6 @@ public class MovieDetailsFragment extends Fragment {
 
         return root;
     }
-
-
 
 
     @Override

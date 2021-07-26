@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
 
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
 
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
 
 
-        hasInternetConnection().subscribe((hasInternet)->{
+        new CompositeDisposable(hasInternetConnection().subscribe((hasInternet)->{
             if(!hasInternet){
 
                 Snackbar.make(binding.getRoot(), "No internet connection.", Snackbar.LENGTH_LONG).show();
@@ -54,10 +55,10 @@ public class MainActivity extends AppCompatActivity {
             else{
                 Log.v("connection", "Device has active internet connection ");
             }
-        });
+        }));
 
 
-        AppDatabase.setDatabase(this);
+        AppDatabase.getDatabase(this);
         handleDeeplinkIntent(getIntent());
 
 

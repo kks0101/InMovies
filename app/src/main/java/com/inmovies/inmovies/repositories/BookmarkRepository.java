@@ -1,5 +1,8 @@
 package com.inmovies.inmovies.repositories;
 
+import android.app.Application;
+import android.content.Context;
+
 import com.inmovies.inmovies.database.AppDatabase;
 import com.inmovies.inmovies.database.BookmarkDao;
 import com.inmovies.inmovies.models.MovieModel;
@@ -15,14 +18,14 @@ public class BookmarkRepository {
     private static BookmarkRepository instance;
     private BookmarkDao bookmarkDao;
 
-    private BookmarkRepository(){
-        AppDatabase db = AppDatabase.getDatabase();
+    private BookmarkRepository(Application application){
+        AppDatabase db = AppDatabase.getDatabase(application);
         bookmarkDao = db.bookmarkDao();
     }
 
-    public static BookmarkRepository getInstance(){
+    public static BookmarkRepository getInstance(Application application){
         if(instance == null)
-            instance = new BookmarkRepository();
+            instance = new BookmarkRepository(application);
         return instance;
     }
 
