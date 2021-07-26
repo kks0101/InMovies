@@ -1,5 +1,8 @@
 package com.inmovies.inmovies.ui.home;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,16 +14,21 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.inmovies.inmovies.LoadingDialog;
+import com.inmovies.inmovies.MobileNavigationDirections;
 import com.inmovies.inmovies.adapters.RecyclerViewAdapter;
 import com.inmovies.inmovies.databinding.FragmentHomeBinding;
 import com.inmovies.inmovies.models.MovieModel;
 import com.inmovies.inmovies.utils.Constants;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class HomeFragment extends Fragment {
@@ -69,6 +77,8 @@ public class HomeFragment extends Fragment {
 //        });
         return root;
     }
+
+
 
 
     // search for movies : both popular and now playing movies
