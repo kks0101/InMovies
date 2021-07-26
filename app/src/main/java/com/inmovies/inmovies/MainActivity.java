@@ -124,18 +124,30 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onChanged(MovieModel movieModel) {
                         if(movieModel!=null){
+                            loadingDialog.hideDialog();
                             MobileNavigationDirections.ActionGlobalNavigationMovieDetails action =
                                     MobileNavigationDirections.actionGlobalNavigationMovieDetails(movieModel);
+                            NavController navController = Navigation.findNavController(curr, R.id.nav_host_fragment_activity_main);
+                            navController.popBackStack();
+                            navController.navigate(action);
 
-                            Navigation.findNavController(curr, R.id.nav_host_fragment_activity_main).navigate(action);
+                        }
+                        else{
                             loadingDialog.hideDialog();
+                            NavController navController = Navigation.findNavController(curr, R.id.nav_host_fragment_activity_main);
+                            navController.popBackStack();
+                            navController.navigate(R.id.errorFragment);
+
                         }
                     }
                 });
             }
             else{
-                Navigation.findNavController(curr, R.id.nav_host_fragment_activity_main).navigate(R.id.errorFragment);
                 loadingDialog.hideDialog();
+                NavController navController = Navigation.findNavController(curr, R.id.nav_host_fragment_activity_main);
+                navController.popBackStack();
+                navController.navigate(R.id.errorFragment);
+
             }
 
         }
