@@ -53,17 +53,17 @@ public class MainActivity extends AppCompatActivity {
         String action = intent.getAction();
         Uri data = intent.getData();
         if(Intent.ACTION_VIEW.equals(action) && data!=null){
-
+            LoadingDialog loadingDialog = new LoadingDialog(this);
+            loadingDialog.showDialog();
             // check if passed movie id is integer
             String regex = "[0-9]+";
             Pattern pattern = Pattern.compile(regex);
             Activity curr = this;
 
             String movieId = data.getQueryParameter("movie_id");
-            Log.v("tag", movieId);
+
             if(movieId!=null && !movieId.isEmpty() && pattern.matcher(movieId).matches()){
-                LoadingDialog loadingDialog = new LoadingDialog(this);
-                loadingDialog.showDialog();
+                Log.v("deeplink", movieId);
 
                 int id = Integer.parseInt(movieId);
                 homeViewModel.searchMovieDetails(id);
@@ -80,7 +80,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
             }
-
+            Navigation.findNavController(curr, R.id.nav_host_fragment_activity_main).navigate(R.id.errorFragment);
+            loadingDialog.hideDialog();
         }
     }
 }

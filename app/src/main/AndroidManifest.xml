@@ -28,14 +28,6 @@
                     android:pathPrefix="/movie"/>
             </intent-filter>
 
-            <intent-filter android:label="@string/filter_movie_inmovies">
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <!-- accept URIs that begin with "inmovies://movie-->
-                <data android:scheme="inmovies"
-                    android:host="movie" />
-            </intent-filter>
         </activity>
     </application>
 

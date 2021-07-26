@@ -33,4 +33,9 @@
     </fragment>
     <action android:id="@+id/action_global_navigation_movie_details"
         app:destination="@id/navigation_movie_details" />
+    <fragment
+        android:id="@+id/errorFragment"
+        android:name="com.inmovies.inmovies.ui.error.ErrorFragment"
+        android:label="fragment_error"
+        tools:layout="@layout/fragment_error" />
 </navigation>
