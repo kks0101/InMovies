@@ -13,12 +13,20 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.inmovies.inmovies.database.AppDatabase;
 import com.inmovies.inmovies.databinding.ActivityMainBinding;
 import com.inmovies.inmovies.models.MovieModel;
 import com.inmovies.inmovies.ui.home.HomeViewModel;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.regex.Pattern;
+
+import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -37,8 +45,38 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
+
+        hasInternetConnection().subscribe((hasInternet)->{
+            if(!hasInternet){
+
+                Snackbar.make(binding.getRoot(), "No internet connection.", Snackbar.LENGTH_LONG).show();
+            }
+            else{
+                Log.v("connection", "Device has active internet connection ");
+            }
+        });
+
+
         AppDatabase.setDatabase(this);
         handleDeeplinkIntent(getIntent());
+
+
+    }
+
+    public static Single<Boolean> hasInternetConnection(){
+        return Single.fromCallable(()->{
+            try{
+                int timeoutMS= 1500;
+                Socket socket = new Socket();
+                InetSocketAddress socketAddress = new InetSocketAddress("8.8.8.8", 53);
+                socket.connect(socketAddress, timeoutMS);
+                socket.close();
+
+                return true;
+            }catch (IOException e){
+                return false;
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
