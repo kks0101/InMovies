@@ -1,9 +1,7 @@
 package com.inmovies.inmovies.repositories;
 
-import android.content.Context;
-
 import com.inmovies.inmovies.database.AppDatabase;
-import com.inmovies.inmovies.database.DatabaseClient;
+import com.inmovies.inmovies.database.BookmarkDao;
 import com.inmovies.inmovies.models.MovieModel;
 
 import java.util.List;
@@ -15,37 +13,37 @@ import io.reactivex.Single;
 public class BookmarkRepository {
 
     private static BookmarkRepository instance;
-    private DatabaseClient databaseClient;
+    private BookmarkDao bookmarkDao;
 
-    private BookmarkRepository(Context context){
-        AppDatabase db = AppDatabase.getDatabase(context);
-        databaseClient = DatabaseClient.getInstance(db.bookmarkDao());
+    private BookmarkRepository(){
+        AppDatabase db = AppDatabase.getDatabase();
+        bookmarkDao = db.bookmarkDao();
     }
 
-    public static BookmarkRepository getInstance(Context context){
+    public static BookmarkRepository getInstance(){
         if(instance == null)
-            instance = new BookmarkRepository(context);
+            instance = new BookmarkRepository();
         return instance;
     }
 
     public Completable insert(MovieModel movieModel){
-        return databaseClient.insert(movieModel);
+        return bookmarkDao.insert(movieModel);
     }
 
     public Completable deleteAll(){
-        return databaseClient.deleteAll();
+        return bookmarkDao.deleteAll();
     }
 
     public Flowable<List<MovieModel>> getAllBookmarks(){
-        return databaseClient.getAllBookmarks();
+        return bookmarkDao.getAllBookmarks();
     }
 
     public Single<MovieModel> getBookmarkById(int id){
-        return databaseClient.getBookmarkById(id);
+        return bookmarkDao.getBookmarkById(id);
     }
 
     public Completable deleteBookmarkById(int id){
-        return databaseClient.deleteBookmarkById(id);
+        return bookmarkDao.deleteBookmarkById(id);
     }
 
 }

@@ -20,8 +20,6 @@ import com.google.android.material.snackbar.Snackbar;
 import com.inmovies.inmovies.R;
 import com.inmovies.inmovies.databinding.FragmentMovieDetailsBinding;
 import com.inmovies.inmovies.models.MovieModel;
-import com.inmovies.inmovies.repositories.BookmarkRepository;
-import com.inmovies.inmovies.repositories.ViewModelFactory;
 import com.inmovies.inmovies.ui.bookmarks.BookmarksViewModel;
 import com.inmovies.inmovies.utils.Constants;
 
@@ -77,11 +75,10 @@ public class MovieDetailsFragment extends Fragment {
         // set the release date
         final TextView releaseDateTextView = binding.content.releaseDateTextView;
         releaseDateTextView.setText(movie.getRelease_date());
-        ViewModelFactory viewModelFactory = new ViewModelFactory(getContext());
-        bookmarksViewModel =
-                new ViewModelProvider(this, viewModelFactory).get(BookmarksViewModel.class);
 
-        final BookmarkRepository bookmarkRepository = BookmarkRepository.getInstance(getContext());
+        bookmarksViewModel =
+                new ViewModelProvider(this).get(BookmarksViewModel.class);
+
         final FloatingActionButton addBookmark = binding.bookmark;
 
 

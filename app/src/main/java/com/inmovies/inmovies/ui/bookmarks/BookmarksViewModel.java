@@ -1,6 +1,5 @@
 package com.inmovies.inmovies.ui.bookmarks;
 
-import android.content.Context;
 import androidx.lifecycle.ViewModel;
 
 import com.inmovies.inmovies.models.MovieModel;
@@ -16,8 +15,8 @@ public class BookmarksViewModel extends ViewModel {
 
     private BookmarkRepository bookmarkRepository;
 
-    public BookmarksViewModel(Context context) {
-        bookmarkRepository = BookmarkRepository.getInstance(context);
+    public BookmarksViewModel() {
+        bookmarkRepository = BookmarkRepository.getInstance();
     }
 
     public Completable insert(MovieModel movieModel){

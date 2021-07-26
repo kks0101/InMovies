@@ -16,7 +16,6 @@ import com.inmovies.inmovies.adapters.RecyclerViewAdapter;
 import com.inmovies.inmovies.databinding.FragmentBookmarksBinding;
 
 import com.inmovies.inmovies.models.MovieModel;
-import com.inmovies.inmovies.repositories.ViewModelFactory;
 import com.inmovies.inmovies.utils.Constants;
 
 
@@ -38,10 +37,9 @@ public class BookmarksFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
 
-        ViewModelFactory viewModelFactory = new ViewModelFactory(getContext());
 
         bookmarksViewModel =
-                new ViewModelProvider(this, viewModelFactory).get(BookmarksViewModel.class);
+                new ViewModelProvider(this).get(BookmarksViewModel.class);
 
 
         binding = FragmentBookmarksBinding.inflate(inflater, container, false);
