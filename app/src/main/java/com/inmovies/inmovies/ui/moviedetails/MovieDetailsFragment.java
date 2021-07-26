@@ -1,5 +1,6 @@
 package com.inmovies.inmovies.ui.moviedetails;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
@@ -25,6 +26,7 @@ import com.inmovies.inmovies.utils.Constants;
 
 import org.jetbrains.annotations.NotNull;
 
+import io.reactivex.Flowable;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -80,7 +82,23 @@ public class MovieDetailsFragment extends Fragment {
                 new ViewModelProvider(this).get(BookmarksViewModel.class);
 
         final FloatingActionButton addBookmark = binding.bookmark;
+        final FloatingActionButton shareButton = binding.shareButton;
 
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                String shareText = "Have you seen " + movie.getTitle() + "? Check it out now!!\n";
+                String link = "http://www.inmovies.com/movie?movie_id=" + movie.getId();
+                sendIntent.putExtra(Intent.EXTRA_TEXT, shareText + link);
+                sendIntent.setType("text/plain");
+
+                Intent shareIntent = Intent.createChooser(sendIntent, null);
+                startActivity(shareIntent);
+
+            }
+        });
 
         // should be modified: going by this approach for now
         // Update the bookmark image

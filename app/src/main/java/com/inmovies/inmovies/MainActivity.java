@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -80,8 +79,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
             }
-            Navigation.findNavController(curr, R.id.nav_host_fragment_activity_main).navigate(R.id.errorFragment);
-            loadingDialog.hideDialog();
+            else{
+                Navigation.findNavController(curr, R.id.nav_host_fragment_activity_main).navigate(R.id.errorFragment);
+                loadingDialog.hideDialog();
+            }
+
         }
     }
 }
