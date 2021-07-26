@@ -1,6 +1,9 @@
 # InMovies
 Browse through your favorite Movies.
 
+![Demo](Screenshots/main.gif) ![Demo](Screenshots/search.gif) ![Demo](Screenshots/deepLinkShare.gif)
+
+
 A simple Android Application that uses [The Movie Db](https://www.themoviedb.org/documentation/api) to show - now playing, popular movies and search for specific movie.
 
 ## Tech Stack
