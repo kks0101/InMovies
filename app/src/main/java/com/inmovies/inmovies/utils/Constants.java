@@ -1,5 +1,8 @@
 package com.inmovies.inmovies.utils;
 
+/**
+ * specify app level constants
+ */
 public class Constants {
 
 
@@ -11,9 +14,6 @@ public class Constants {
 
     // URL to fetch image of any movie poster path or backdrop path
     public static final String BASE_IMAGE_URL = "https://image.tmdb.org/t/p/w500";
-
-    // Thread pool size for Executor thread pool
-    public static int THREAD_POOL = 4;
 
     // Number of columns in Recycler View
     public static int NUMBER_OF_COLUMNS = 2;

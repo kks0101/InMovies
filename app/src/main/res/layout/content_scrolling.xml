@@ -33,7 +33,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:gravity="center"
-                    android:text="488"
+                    android:text="@string/dummy_like"
                     android:id="@+id/likes_textView"/>
 
             </LinearLayout>
@@ -41,7 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="right">
+                android:gravity="end">
                 <ImageView
                     android:layout_margin="5dp"
                     android:layout_width="wrap_content"
@@ -51,7 +51,7 @@
                     android:layout_marginTop="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="8.9"
+                    android:text="@string/dummy_rating"
                     android:id="@+id/rating_textView"/>
 
             </LinearLayout>
@@ -65,7 +65,7 @@
                 android:layout_marginBottom="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Overview"
+                android:text="@string/overview"
                 android:gravity="start"
                 android:textStyle="bold"
                 android:textSize="30sp"/>
@@ -79,12 +79,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Release Date:"/>
+                    android:text="@string/release_date"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/release_date_textView"
-                    android:text="2021-07-24"/>
+                    android:text="@string/dummy_release_date"/>
             </LinearLayout>
         </RelativeLayout>
         <TextView

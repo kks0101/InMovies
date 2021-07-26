@@ -1,14 +1,15 @@
 package com.inmovies.inmovies.response;
 
-import androidx.annotation.NonNull;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.inmovies.inmovies.models.MovieModel;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.List;
+
+/**
+ * GSON JSON Adapter to parse and serialize response obtained by TMDB Now Playing API
+ * https://api.themoviedb.org/3/movie/now_playing
+ */
 
 public class MovieNowPlayingResponse {
 
@@ -17,6 +18,10 @@ public class MovieNowPlayingResponse {
     @Expose()
     private List<MovieModel> nowPlayingMovies;
 
+    /**
+     *  get the list of MovieModel after serializing the "results" json array
+     * @return List<MovieModel>
+     */
     public List<MovieModel> getNowPlayingMovies(){
         return nowPlayingMovies;
     }

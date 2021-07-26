@@ -7,9 +7,12 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-// specifies the data to be encapsulated for movie details fetched from API
-// implementing parcelable to share data from one UI component(Fragment/Activity) to other
-// e.g., get movie Detail for a given movie id
+
+/**
+ * specifies the data to be encapsulated for movie details fetched from API
+ * implementing parcelable to share data from one UI component(Fragment/Activity) to other
+ * e.g., get movie Detail for a given movie id
+ */
 @Entity(tableName = "movie_table")
 public class MovieModel implements Parcelable {
 

@@ -11,6 +11,10 @@ import com.inmovies.inmovies.R;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * View Holder class used by Recycler view to render data to each items
+ * Also facilitates on click functionality on each item
+ */
 public class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
     TextView movieTitle;

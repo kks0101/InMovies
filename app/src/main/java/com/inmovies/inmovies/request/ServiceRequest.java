@@ -7,6 +7,9 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/**
+ * Retrofit builder class
+ */
 public class ServiceRequest {
 
     private static Retrofit.Builder retrofitBuilder = new Retrofit.Builder()

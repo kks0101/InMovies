@@ -6,9 +6,11 @@ import com.inmovies.inmovies.request.ApiClient;
 
 import java.util.List;
 
-
-// We are using MVVM architecture : This Singleton class acts as Repository to which ViewModel
-// interacts, to get the data from the data source
+/**
+ * // We are using MVVM architecture : This Singleton class acts as Repository to which ViewModel
+ * // interacts, to get the data from the data source
+ * Currently in this app, this repository interacts with Api call/service (remote data source)
+ */
 public class MovieRepository {
 
     // Singleton Class
@@ -38,20 +40,33 @@ public class MovieRepository {
         return apiClient.getMoviesByQuery();
     }
 
-    // call both the api: popular Movie as well as Now Playing
+    /**
+     * call both the api to get list of movies: popular Movie as well as Now Playing
+     * @param pageNumber
+     */
     public void searchMovies(int pageNumber){
         apiClient.searchPopularMovies(pageNumber);
         apiClient.searchNowPlayingMovies(pageNumber);
     }
 
+    /**
+     * call the api to get list of movies by query string
+     * @param query
+     * @param pageNumber
+     */
     public void searchMovies(String query, int pageNumber){
         apiClient.searchMoviesByQuery(query, pageNumber);
     }
+
 
     public LiveData<MovieModel> getMovieDetails(){
         return apiClient.getMovieDetails();
     }
 
+    /**
+     * call the api to get the details of a particular movie given by movie id
+     * @param movie_id
+     */
     public void searchMovieDetails(int movie_id){
         apiClient.searchMovieDetails(movie_id);
     }

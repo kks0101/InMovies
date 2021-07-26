@@ -84,12 +84,15 @@ public class MovieDetailsFragment extends Fragment {
         final FloatingActionButton addBookmark = binding.bookmark;
         final FloatingActionButton shareButton = binding.shareButton;
 
+
+        // Implementing sharing of movie feature
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
                 String shareText = "Have you seen " + movie.getTitle() + "? Check it out now!!\n";
+                // generating deep link for this movie
                 String link = "http://www.inmovies.com/movie?movie_id=" + movie.getId();
                 sendIntent.putExtra(Intent.EXTRA_TEXT, shareText + link);
                 sendIntent.setType("text/plain");
@@ -101,7 +104,8 @@ public class MovieDetailsFragment extends Fragment {
         });
 
         // should be modified: going by this approach for now
-        // Update the bookmark image
+        // Check if this movie as already been bookmarked:
+        // update the bookmark button image accordingly
         bookmarksViewModel.getBookmarkById(movie.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

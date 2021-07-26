@@ -1,14 +1,15 @@
 package com.inmovies.inmovies.response;
 
 
-import androidx.annotation.NonNull;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.inmovies.inmovies.models.MovieModel;
 
-import org.jetbrains.annotations.NotNull;
 
+/**
+ *  GSON JSON Adapter class to serialize JSON response:
+ *  convert json to MovieModel object
+ */
 public class MovieDetailsResponse {
 
     @SerializedName("title")
@@ -43,7 +44,10 @@ public class MovieDetailsResponse {
     @Expose()
     private String release_date;
 
-
+    /**
+     *  get MovieModel object once the json response is parsed and serialized
+     * @return MovieModel
+     */
     public MovieModel getMovie(){
         return new MovieModel(this.title, this.poster_path, this.overview,
                 this.backdrop_path, this.id, this.vote_average,

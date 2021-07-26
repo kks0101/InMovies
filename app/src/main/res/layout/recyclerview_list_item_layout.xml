@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/movie_title"
         android:textSize="15sp"
-        android:text="Movie Title"
+        android:text="@string/movie_title"
         android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"/>
     <TextView
@@ -34,5 +34,5 @@
         android:textSize="12sp"
         android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"
-        android:text="299 Likes" />
+        android:text="@string/likes" />
 </LinearLayout>

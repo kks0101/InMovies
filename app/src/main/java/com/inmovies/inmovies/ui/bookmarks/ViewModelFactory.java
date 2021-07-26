@@ -8,6 +8,12 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.jetbrains.annotations.NotNull;
 
+
+/**
+ * We need ViewModelFactory because accessing the the Singleton Database object
+ * requires application reference, and since ViewModelProvider does not allow creating
+ * view model with args constructor, this class facilitates that use case
+ */
 public class ViewModelFactory implements ViewModelProvider.Factory {
 
     Application application;

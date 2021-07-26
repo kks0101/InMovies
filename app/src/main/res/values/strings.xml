@@ -13,5 +13,12 @@
     <string name="error_page_text">OOPS!! We could not find that page</string>
     <string name="post_error_button_text">Try exploring Movies</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
+    <string name="movie_title">Movie Title</string>
+    <string name="likes">Likes</string>
+    <string name="dummy_release_date">2021-07-21</string>
+    <string name="release_date">Release Date:</string>
+    <string name="overview">Overview</string>
+    <string name="dummy_rating">8.9</string>
+    <string name="dummy_like">488</string>
+    <string name="logo">TMDB Logo</string>
 </resources>

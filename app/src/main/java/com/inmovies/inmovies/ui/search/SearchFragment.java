@@ -5,10 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -44,6 +42,8 @@ public class SearchFragment extends Fragment {
         searchResultRecyclerView.setAdapter(searchResultRecyclerViewAdapter);
         searchResultRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), Constants.NUMBER_OF_COLUMNS));
 
+
+        // Implement search functionality to get the data as and when user types or submits
         SearchView searchView = binding.searchView;
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -60,6 +60,7 @@ public class SearchFragment extends Fragment {
             }
         });
 
+        // get the details from API and display them in recyceler view
         searchViewModel.getMoviesByQuery().observe(getViewLifecycleOwner(), new Observer<List<MovieModel>>() {
             @Override
             public void onChanged(List<MovieModel> movieModels) {

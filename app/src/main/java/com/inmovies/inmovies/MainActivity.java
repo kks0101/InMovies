@@ -14,7 +14,6 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.inmovies.inmovies.database.AppDatabase;
 import com.inmovies.inmovies.databinding.ActivityMainBinding;
 import com.inmovies.inmovies.models.MovieModel;
 import com.inmovies.inmovies.ui.home.HomeViewModel;
@@ -42,11 +41,19 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // get reference to View model (MVVM architecture)
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+
+        // This app uses Android JetPack Navigation Component to control all the transition from
+        // one screen to another.
+        //
+        // The app uses single Activity and multiple fragments.
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
 
+        // Checks for internet connectivity
+        // Uses RxJava to ping a google server on background thread to verify network connectivity
         new CompositeDisposable(hasInternetConnection().subscribe((hasInternet)->{
             if(!hasInternet){
 
@@ -57,13 +64,13 @@ public class MainActivity extends AppCompatActivity {
             }
         }));
 
-
-        AppDatabase.getDatabase(this);
         handleDeeplinkIntent(getIntent());
-
 
     }
 
+    /**
+     * Pings Google server on background thread to check internet connectivity
+     */
     public static Single<Boolean> hasInternetConnection(){
         return Single.fromCallable(()->{
             try{
@@ -87,10 +94,16 @@ public class MainActivity extends AppCompatActivity {
         handleDeeplinkIntent(intent);
     }
 
+    /**
+     * handle deep link intent: deep links are link to specific component of application
+     * when user click on a url specified as deep link: it opens the specific movie details
+     * @param intent
+     */
     private void handleDeeplinkIntent(Intent intent){
         String action = intent.getAction();
         Uri data = intent.getData();
         if(Intent.ACTION_VIEW.equals(action) && data!=null){
+            // creating a loading dialog
             LoadingDialog loadingDialog = new LoadingDialog(this);
             loadingDialog.showDialog();
             // check if passed movie id is integer
@@ -99,12 +112,14 @@ public class MainActivity extends AppCompatActivity {
             Activity curr = this;
 
             String movieId = data.getQueryParameter("movie_id");
-
+            // if valid movie id
             if(movieId!=null && !movieId.isEmpty() && pattern.matcher(movieId).matches()){
                 Log.v("deeplink", movieId);
 
                 int id = Integer.parseInt(movieId);
+                // calls the Api to get the movie details:
                 homeViewModel.searchMovieDetails(id);
+
                 homeViewModel.getMovieDetailsById().observe(this, new Observer<MovieModel>() {
                     @Override
                     public void onChanged(MovieModel movieModel) {

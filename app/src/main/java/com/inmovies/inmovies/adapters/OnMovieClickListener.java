@@ -2,6 +2,9 @@ package com.inmovies.inmovies.adapters;
 
 import android.view.View;
 
+/**
+ * used to implement on click behavior on each recycler view item
+ */
 public interface OnMovieClickListener {
-    public void onMovieClick(int position, View view);
+    void onMovieClick(int position, View view);
 }

@@ -5,4 +5,5 @@
     <dimen name="home_textview_size">20sp</dimen>
     <dimen name="movie_title_size">20dp</dimen>
     <dimen name="movie_likes_size">16dp</dimen>
+    <dimen name="now_playing_recycler_view_height">230dp</dimen>
 </resources>

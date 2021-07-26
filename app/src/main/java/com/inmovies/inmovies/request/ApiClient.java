@@ -14,9 +14,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
-// Singleton Class: Repository requests the data from the client
-// Client interacts with the data sources: (making api calls or accessing the data base)
-// to get the data; The data retrieval is done through JAVA Executors
+
+/**
+ *  Singleton Class: Repository requests the data from the client
+ *  Client interacts with the data sources: (making api calls or accessing the data base)
+ *  to get the data; The data retrieval is done through RxJava
+ */
 public class ApiClient {
 
     private static ApiClient instance;
@@ -40,28 +43,52 @@ public class ApiClient {
         movieApi = ServiceRequest.getMovieApi();
     }
 
+    /**
+     * facilitating singleton behavior
+     * @return ApiClient instance
+     */
     public static ApiClient getInstance(){
         if(instance==null)
             instance = new ApiClient();
         return instance;
     }
 
+    /**
+     * get a list of movies obtained by now playing api call
+     * @return LiveData<List<MovieModel>>
+     */
     public LiveData<List<MovieModel>> getNowPlayingMovies(){
         return nowPlayingMovieList;
     }
 
+    /**
+     * get a list of movies obtained by popular api call
+     * @return LiveData<List<MovieModel>>
+     */
     public LiveData<List<MovieModel>> getPopularMovies(){
         return popularMovieList;
     }
 
+    /**
+     * get a list of movies obtained by search api call on a query string
+     * @return LiveData<List<MovieModel>>
+     */
     public LiveData<List<MovieModel>> getMoviesByQuery(){
         return movieListByQuery;
     }
 
+    /**
+     * get movie object obtained by search movie by id api call
+     * @return MovieModel
+     */
     public LiveData<MovieModel> getMovieDetails(){
         return movieDetailsByID;
     }
 
+    /**
+     * asynchronously observes for movie detail response obtained for api call
+     * @param movie_id
+     */
     public void searchMovieDetails(int movie_id){
         disposable.add(movieApi.getMovieDetails(
                 movie_id,
@@ -73,6 +100,7 @@ public class ApiClient {
         .subscribe(this::handleMovieDetailsSuccess, this::handleMovieDetailsError));
     }
 
+
     private void handleMovieDetailsError(Throwable throwable) {
         movieDetailsByID.setValue(null);
         Log.e("response", "Unable to get details: " + throwable.getMessage());
@@ -83,6 +111,11 @@ public class ApiClient {
         movieDetailsByID.setValue(movieModel);
     }
 
+
+    /**
+     * asynchronously observes response obtained on api call to get all now playing movies
+     * @param pageNumber
+     */
     public void searchNowPlayingMovies(int pageNumber){
 
         disposable.add(movieApi.nowPlayingMovie(
@@ -95,6 +128,7 @@ public class ApiClient {
 
     }
 
+
     private void handleNowPlayingError(Throwable throwable) {
         nowPlayingMovieList.setValue(null);
         Log.v("response", "Error occurred fetching now playing movies" + throwable.getMessage());
@@ -104,7 +138,10 @@ public class ApiClient {
         nowPlayingMovieList.setValue(movieModels);
     }
 
-
+    /**
+     * asynchronously observes response obtained on api call to get all popular movies
+     * @param pageNumber
+     */
     public void searchPopularMovies(int pageNumber){
 
         disposable.add(movieApi.popularMovies(
@@ -127,6 +164,11 @@ public class ApiClient {
         popularMovieList.setValue(movieModels);
     }
 
+    /**
+     * asynchronously observes response obtained on api call to get all movies by query
+     * @param query
+     * @param pageNumber
+     */
     public void searchMoviesByQuery(String query, int pageNumber){
 
         disposable.add(movieApi.queryMovies(

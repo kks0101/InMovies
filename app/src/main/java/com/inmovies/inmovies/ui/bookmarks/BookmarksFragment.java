@@ -36,11 +36,6 @@ public class BookmarksFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-
-
-
-
-
         binding = FragmentBookmarksBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         ViewModelFactory viewModelFactory = new ViewModelFactory(getActivity().getApplication());
@@ -55,6 +50,10 @@ public class BookmarksFragment extends Fragment {
         return root;
     }
 
+
+    /**
+     * using RxJava to query database on background thread
+     */
     public void getAllBookmarks(){
 
         // Using RxJava to get details from Bookmark Database
@@ -71,10 +70,8 @@ public class BookmarksFragment extends Fragment {
 
             }
 
-
-
                 },throwable -> Log.e("bookmark", "Unable to get bookmarks", throwable)
-                ));
+        ));
     }
 
     @Override

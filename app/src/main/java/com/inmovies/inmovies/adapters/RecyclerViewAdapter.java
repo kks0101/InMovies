@@ -19,6 +19,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+/**
+ * Adapter used by recycler view to display list of movies.
+ * In this app, we use this adapter to configure recycler view
+ */
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnMovieClickListener{
 
     private List<MovieModel> movieList;

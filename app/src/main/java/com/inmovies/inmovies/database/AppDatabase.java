@@ -8,7 +8,10 @@ import androidx.room.RoomDatabase;
 
 import com.inmovies.inmovies.models.MovieModel;
 
-
+/**
+ * Singleton class to get instance of database to interact with different table
+ * in the database
+ */
 @Database(entities = {MovieModel.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 

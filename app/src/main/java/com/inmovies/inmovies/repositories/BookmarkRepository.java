@@ -1,7 +1,6 @@
 package com.inmovies.inmovies.repositories;
 
 import android.app.Application;
-import android.content.Context;
 
 import com.inmovies.inmovies.database.AppDatabase;
 import com.inmovies.inmovies.database.BookmarkDao;
@@ -13,6 +12,11 @@ import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
 
+/**
+ * We are using MVVM architecture : This Singleton class acts as Repository to which ViewModel
+ * interacts, to get the data from the data source
+ * Currently in this app, this repository interacts with Bookmark database
+ */
 public class BookmarkRepository {
 
     private static BookmarkRepository instance;
