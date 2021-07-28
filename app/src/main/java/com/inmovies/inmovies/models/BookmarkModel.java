@@ -4,6 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+
+/**
+ * bookmark table to store movie id in separate table
+ */
 @Entity(tableName = "bookmark_table")
 public class BookmarkModel {
 

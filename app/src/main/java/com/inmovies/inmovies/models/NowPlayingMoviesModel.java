@@ -5,6 +5,9 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+/**
+ * table to store movie id for all now playing movies
+ */
 @Entity(tableName = "now_playing_movie_table")
 public class NowPlayingMoviesModel {
 

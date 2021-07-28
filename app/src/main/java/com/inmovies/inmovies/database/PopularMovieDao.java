@@ -14,6 +14,9 @@ import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
 
+/**
+ * DAO interface used by Room database to query the database for all popular movies
+ */
 @Dao
 public interface PopularMovieDao {
 

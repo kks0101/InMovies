@@ -15,7 +15,7 @@ import io.reactivex.Flowable;
 import io.reactivex.Single;
 
 /**
- * DAO interface used by Room database to query the database
+ * DAO interface used by Room database to query the database for bookmarks
  */
 @Dao
 public interface BookmarkDao {

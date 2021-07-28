@@ -4,6 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+/**
+ * table to store movie id for all popular movies
+ */
 @Entity(tableName = "popular_movie_table")
 public class PopularMoviesModel {
 
