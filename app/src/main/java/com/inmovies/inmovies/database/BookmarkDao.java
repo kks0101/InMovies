@@ -2,8 +2,10 @@ package com.inmovies.inmovies.database;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import com.inmovies.inmovies.models.BookmarkModel;
 import com.inmovies.inmovies.models.MovieModel;
 
 import java.util.List;
@@ -19,19 +21,18 @@ import io.reactivex.Single;
 public interface BookmarkDao {
 
     @Insert()
-    Completable insert(MovieModel movieModel);
+    Completable insert(BookmarkModel bookmarkModel);
 
-    @Query("DELETE FROM movie_table")
-    Completable deleteAll();
-
-    @Query("SELECT * FROM movie_table")
+    @Query("SELECT * FROM bookmark_table JOIN movie_table ON bookmark_table.movie_id = movie_table.id")
     Flowable<List<MovieModel>> getAllBookmarks();
 
-    @Query("SELECT * FROM movie_table WHERE id = :id")
-    Single<MovieModel> getBookmarkById(int id);
+    @Query("DELETE FROM bookmark_table")
+    Completable deleteAllBookmarks();
 
-    @Query("DELETE FROM movie_table WHERE id = :id")
-    Completable deleteBookmarkById(int id);
+    @Query("DELETE FROM bookmark_table WHERE movie_id = :movie_id")
+    Completable deleteBookmarkById(int movie_id);
 
-
+    @Query("SELECT * FROM movie_table JOIN bookmark_table ON " +
+            "bookmark_table.movie_id = movie_table.id WHERE bookmark_table.movie_id = :movie_id")
+    Single<MovieModel> getBookmarkById(int movie_id);
 }

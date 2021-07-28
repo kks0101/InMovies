@@ -164,7 +164,7 @@ public class MovieDetailsFragment extends Fragment {
                             @Override
                             public void onError(@NotNull Throwable e) {
                                 Log.v("bookmark", "trying to add bookmark");
-                                disposable.add(bookmarksViewModel.insert(movie)
+                                disposable.add(bookmarksViewModel.insert(movie.getId())
                                         .subscribeOn(Schedulers.io())
                                         .observeOn(AndroidSchedulers.mainThread())
                                         .subscribe(()->{

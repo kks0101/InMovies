@@ -1,5 +1,7 @@
 package com.inmovies.inmovies.ui.search;
 
+import android.app.Application;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -13,8 +15,8 @@ public class SearchViewModel extends ViewModel {
 
     private MovieRepository movieRepository;
 
-    public SearchViewModel(){
-        movieRepository = MovieRepository.getInstance();
+    public SearchViewModel(Application application){
+        movieRepository = MovieRepository.getInstance(application);
 
     }
 

@@ -1,6 +1,10 @@
 package com.inmovies.inmovies.repositories;
 
+import android.content.Context;
+
 import androidx.lifecycle.LiveData;
+
+import com.inmovies.inmovies.database.DbClient;
 import com.inmovies.inmovies.models.MovieModel;
 import com.inmovies.inmovies.request.ApiClient;
 
@@ -17,23 +21,32 @@ public class MovieRepository {
     private static MovieRepository instance;
 
     private ApiClient apiClient;
+    private DbClient dbClient;
 
-    private MovieRepository(){
-        apiClient = ApiClient.getInstance();
+    private MovieRepository(Context context) {
+        dbClient = DbClient.getInstance(context);
+        apiClient = ApiClient.getInstance(context);
     }
 
-    public static MovieRepository getInstance(){
+    public static MovieRepository getInstance(Context context){
         if(instance==null)
-            instance = new MovieRepository();
+            instance = new MovieRepository(context);
         return instance;
     }
 
     public LiveData<List<MovieModel>> getNowPlayingMovies(){
-        return apiClient.getNowPlayingMovies();
+        // single source of data is database: we always retrieve data from the database
+        // and at the same time update the data from the api
+        // this enables offline working of the app
+        apiClient.searchNowPlayingMovies(1);
+
+
+        return dbClient.getAllNowPlayingMovies();
     }
 
     public LiveData<List<MovieModel>> getPopularMovies(){
-        return apiClient.getPopularMovies();
+        apiClient.searchPopularMovies(1);
+        return dbClient.getAllPopularMovies();
     }
 
     public LiveData<List<MovieModel>> getMoviesByQuery(){

@@ -17,6 +17,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.inmovies.inmovies.databinding.ActivityMainBinding;
 import com.inmovies.inmovies.models.MovieModel;
 import com.inmovies.inmovies.ui.home.HomeViewModel;
+import com.inmovies.inmovies.ui.home.HomeViewModelFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -41,8 +42,9 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        HomeViewModelFactory homeViewModelFactory = new HomeViewModelFactory(getApplication());
         // get reference to View model (MVVM architecture)
-        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        homeViewModel = new ViewModelProvider(this, homeViewModelFactory).get(HomeViewModel.class);
 
         // This app uses Android JetPack Navigation Component to control all the transition from
         // one screen to another.

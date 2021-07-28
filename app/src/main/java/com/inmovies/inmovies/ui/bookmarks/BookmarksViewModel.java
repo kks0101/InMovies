@@ -22,8 +22,8 @@ public class BookmarksViewModel extends ViewModel {
         bookmarkRepository = BookmarkRepository.getInstance(application);
     }
 
-    public Completable insert(MovieModel movieModel){
-        return bookmarkRepository.insert(movieModel);
+    public Completable insert(int id){
+        return bookmarkRepository.insert(id);
     }
 
     public Completable deleteAll(){

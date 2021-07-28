@@ -1,17 +1,32 @@
 package com.inmovies.inmovies.request;
 
+import android.content.Context;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.inmovies.inmovies.database.AppDatabase;
+import com.inmovies.inmovies.database.BookmarkDao;
+import com.inmovies.inmovies.database.DbClient;
+import com.inmovies.inmovies.database.MovieDao;
+import com.inmovies.inmovies.database.NowPlayingMovieDao;
+import com.inmovies.inmovies.models.BookmarkModel;
 import com.inmovies.inmovies.models.MovieModel;
+import com.inmovies.inmovies.models.NowPlayingMoviesModel;
 import com.inmovies.inmovies.utils.Constants;
 import com.inmovies.inmovies.utils.MovieApi;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
+
+import io.reactivex.Completable;
+import io.reactivex.CompletableObserver;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 
@@ -29,13 +44,21 @@ public class ApiClient {
     private static MutableLiveData<List<MovieModel>> movieListByQuery;
     private static MutableLiveData<MovieModel> movieDetailsByID;
 
+    private DbClient dbClient;
+//    private BookmarkDao bookmarkDao;
+//    private NowPlayingMovieDao nowPlayingMovieDao;
+//    private MovieDao movieDao;
     // disposable
     private CompositeDisposable disposable = new CompositeDisposable();
 
     //service api : to make API calls
     final private MovieApi movieApi;
 
-    private ApiClient(){
+    private ApiClient(Context context){
+//        bookmarkDao = AppDatabase.getDatabase(context).bookmarkDao();
+//        nowPlayingMovieDao = AppDatabase.getDatabase(context).nowPlayingMovieDao();
+//        movieDao = AppDatabase.getDatabase(context).movieDao();
+        dbClient = DbClient.getInstance(context);
         nowPlayingMovieList = new MutableLiveData<>();
         popularMovieList = new MutableLiveData<>();
         movieListByQuery = new MutableLiveData<>();
@@ -47,9 +70,9 @@ public class ApiClient {
      * facilitating singleton behavior
      * @return ApiClient instance
      */
-    public static ApiClient getInstance(){
+    public static ApiClient getInstance(Context context){
         if(instance==null)
-            instance = new ApiClient();
+            instance = new ApiClient(context);
         return instance;
     }
 
@@ -100,6 +123,12 @@ public class ApiClient {
         .subscribe(this::handleMovieDetailsSuccess, this::handleMovieDetailsError));
     }
 
+//    private void updateDatabase(MovieModel movieModel){
+//        disposable.add(bookmarkDao.insert(new BookmarkModel(movieModel.getId()))
+//        .subscribeOn(Schedulers.io())
+//        .observeOn(AndroidSchedulers.mainThread())
+//        .subscribe());
+//    }
 
     private void handleMovieDetailsError(Throwable throwable) {
         movieDetailsByID.setValue(null);
@@ -117,17 +146,36 @@ public class ApiClient {
      * @param pageNumber
      */
     public void searchNowPlayingMovies(int pageNumber){
-
+        // getting the data from the api and storing it in the database
         disposable.add(movieApi.nowPlayingMovie(
                 Constants.API_KEY,
                 pageNumber
         ).subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .map(movieNowPlayingResponse -> movieNowPlayingResponse.getNowPlayingMovies())
+                .flatMap(movieModelList -> {
+                    for(MovieModel movieModel: movieModelList){
+                        Log.v("check now playing", movieModel.getTitle());
+                        addToMovieDatabase(movieModel);
+                        addToNowPlayingMoviesDatabase(movieModel.getId());
+                    }
+                    return Observable.just(movieModelList);
+                })
         .subscribe(this::handleNowPlayingSuccess, this::handleNowPlayingError));
 
     }
 
+    private void addToMovieDatabase(MovieModel movieModel){
+        dbClient.addToMovieDb(movieModel);
+    }
+
+    private void addToNowPlayingMoviesDatabase(int id){
+        dbClient.addToNowPlayingMovieDb(id);
+    }
+
+    private void addToPopularMoviesDatabase(int id){
+        dbClient.addToPopularMovieDb(id);
+    }
 
     private void handleNowPlayingError(Throwable throwable) {
         nowPlayingMovieList.setValue(null);
@@ -144,12 +192,21 @@ public class ApiClient {
      */
     public void searchPopularMovies(int pageNumber){
 
+        // getting the data from the api and storing it in the database
         disposable.add(movieApi.popularMovies(
                 Constants.API_KEY,
                 pageNumber
         ).subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .map(moviePopularResponse -> moviePopularResponse.getPopularMovieList())
+                .flatMap(movieModelList -> {
+                    for(MovieModel movieModel: movieModelList){
+                        Log.v("check popular", movieModel.getTitle());
+                        addToMovieDatabase(movieModel);
+                        addToPopularMoviesDatabase(movieModel.getId());
+                    }
+                    return Observable.just(movieModelList);
+                })
         .subscribe(this::handlePopularMovieSuccess, this::handlePopularMovieError));
 
 

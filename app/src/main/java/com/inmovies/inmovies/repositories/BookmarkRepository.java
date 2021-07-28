@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.inmovies.inmovies.database.AppDatabase;
 import com.inmovies.inmovies.database.BookmarkDao;
+import com.inmovies.inmovies.models.BookmarkModel;
 import com.inmovies.inmovies.models.MovieModel;
 
 import java.util.List;
@@ -33,12 +34,12 @@ public class BookmarkRepository {
         return instance;
     }
 
-    public Completable insert(MovieModel movieModel){
-        return bookmarkDao.insert(movieModel);
+    public Completable insert(int id){
+        return bookmarkDao.insert(new BookmarkModel(id));
     }
 
     public Completable deleteAll(){
-        return bookmarkDao.deleteAll();
+        return bookmarkDao.deleteAllBookmarks();
     }
 
     public Flowable<List<MovieModel>> getAllBookmarks(){

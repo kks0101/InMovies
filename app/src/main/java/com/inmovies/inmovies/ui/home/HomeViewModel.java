@@ -1,5 +1,7 @@
 package com.inmovies.inmovies.ui.home;
 
+import android.app.Application;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -12,8 +14,8 @@ public class HomeViewModel extends ViewModel {
 
     private MovieRepository movieRepository;
 
-    public HomeViewModel() {
-        movieRepository = MovieRepository.getInstance();
+    public HomeViewModel(Application application) {
+        movieRepository = MovieRepository.getInstance(application);
     }
 
     public LiveData<List<MovieModel>> getPopularMovies(){
