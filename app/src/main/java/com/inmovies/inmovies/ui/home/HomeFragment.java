@@ -2,6 +2,7 @@ package com.inmovies.inmovies.ui.home;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +26,8 @@ import com.inmovies.inmovies.adapters.RecyclerViewAdapter;
 import com.inmovies.inmovies.databinding.FragmentHomeBinding;
 import com.inmovies.inmovies.models.MovieModel;
 import com.inmovies.inmovies.utils.Constants;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -57,17 +60,21 @@ public class HomeFragment extends Fragment {
         popularMovieRecyclerView.setAdapter(popularMovieRecyclerViewAdapter);
         nowPlayingRecyclerView.setAdapter(nowPlayingRecyclerViewAdapter);
 
+        if(getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            popularMovieRecyclerView.setLayoutManager(new GridLayoutManager(getActivity().getApplicationContext(), Constants.NUMBER_OF_COLUMNS_LANDSCAPE));
+        }
+        else{
+            popularMovieRecyclerView.setLayoutManager(new GridLayoutManager(getActivity().getApplicationContext(), Constants.NUMBER_OF_COLUMNS_PORTRAIT));
+        }
+
         nowPlayingRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        popularMovieRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), Constants.NUMBER_OF_COLUMNS));
+        //popularMovieRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), Constants.NUMBER_OF_COLUMNS));
 
 
         observeChanges();
         searchMovies(1);
         return root;
     }
-
-
-
 
     // search for movies : both popular and now playing movies
     public void searchMovies(int pageNumber){

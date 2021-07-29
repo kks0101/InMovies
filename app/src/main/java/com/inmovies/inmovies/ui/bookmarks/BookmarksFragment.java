@@ -1,5 +1,6 @@
 package com.inmovies.inmovies.ui.bookmarks;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,7 +45,14 @@ public class BookmarksFragment extends Fragment {
         bookmarkRecyclerView = binding.bookmarkRecyclerview;
         bookmarkRecyclerViewAdapter = new RecyclerViewAdapter();
         bookmarkRecyclerView.setAdapter(bookmarkRecyclerViewAdapter);
-        bookmarkRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), Constants.NUMBER_OF_COLUMNS));
+
+        //bookmarkRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), Constants.NUMBER_OF_COLUMNS));
+        if(getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            bookmarkRecyclerView.setLayoutManager(new GridLayoutManager(getActivity().getApplicationContext(), Constants.NUMBER_OF_COLUMNS_LANDSCAPE));
+        }
+        else{
+            bookmarkRecyclerView.setLayoutManager(new GridLayoutManager(getActivity().getApplicationContext(), Constants.NUMBER_OF_COLUMNS_PORTRAIT));
+        }
 
         getAllBookmarks();
         return root;

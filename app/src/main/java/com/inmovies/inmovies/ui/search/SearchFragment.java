@@ -1,5 +1,6 @@
 package com.inmovies.inmovies.ui.search;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,7 +43,13 @@ public class SearchFragment extends Fragment {
         searchResultRecyclerViewAdapter = new RecyclerViewAdapter();
 
         searchResultRecyclerView.setAdapter(searchResultRecyclerViewAdapter);
-        searchResultRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), Constants.NUMBER_OF_COLUMNS));
+        //searchResultRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), Constants.NUMBER_OF_COLUMNS));
+        if(getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            searchResultRecyclerView.setLayoutManager(new GridLayoutManager(getActivity().getApplicationContext(), Constants.NUMBER_OF_COLUMNS_LANDSCAPE));
+        }
+        else{
+            searchResultRecyclerView.setLayoutManager(new GridLayoutManager(getActivity().getApplicationContext(), Constants.NUMBER_OF_COLUMNS_PORTRAIT));
+        }
 
 
         // Implement search functionality to get the data as and when user types or submits

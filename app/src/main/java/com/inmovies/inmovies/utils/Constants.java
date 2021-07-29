@@ -15,6 +15,9 @@ public class Constants {
     // URL to fetch image of any movie poster path or backdrop path
     public static final String BASE_IMAGE_URL = "https://image.tmdb.org/t/p/w500";
 
-    // Number of columns in Recycler View
-    public static int NUMBER_OF_COLUMNS = 2;
+    // Number of columns in Recycler View in portrait mode
+    public static int NUMBER_OF_COLUMNS_PORTRAIT = 2;
+
+    // Number of columns in Recycler View in landscape mode
+    public static int NUMBER_OF_COLUMNS_LANDSCAPE = 4;
 }
